@@ -1,12 +1,26 @@
 import { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./firebase";
+import { useNavigate } from "react-router-dom";
 
-export default function Login() {
+export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ email, password });
+    setLoading(true);
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      setMessage("Sign Up Success!");
+      setTimeout(() => navigate("/"), 1000);
+    } catch (error: any) {
+      setMessage(error.message);
+      setLoading(false);
+    }
   };
 
   return (
@@ -89,9 +103,10 @@ export default function Login() {
 
             <button
               type="submit"
-              className="w-full bg-[#4F70FD] text-white py-3 rounded-xl text-lg font-semibold"
+              disabled={loading}
+              className="w-full bg-[#4F70FD] text-white py-3 rounded-xl text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Create Account
+              {loading ? "Creating Account..." : "Create Account"}
             </button>
           </form>
 
@@ -102,6 +117,13 @@ export default function Login() {
               Sign in
             </a>
           </p>
+
+          {/* Message */}
+          {message && (
+            <p className={`mt-4 text-sm ${message.includes("Success") ? "text-green-600" : "text-red-600"}`}>
+              {message}
+            </p>
+          )}
         </div>
       </div>
     </>
