@@ -27,7 +27,7 @@ export default function Onboarding() {
         <section className="flex flex-col justify-start gap-6 py-8 align-middle border-b sm:gap-11 border-b-black/55 ">
           <div className="flex flex-col justify-start gap-2 align-middle">
             <h2 className="text-lg font-bold font-[Arial] lg:text-4xl sm:text-2xl">
-              Product Name *
+              Product Name<span className="text-red-600">*</span>
             </h2>
             <input
               type="text"
@@ -38,7 +38,7 @@ export default function Onboarding() {
           </div>
           <div className="flex flex-col justify-start gap-2 align-middle">
             <h2 className="text-lg font-bold sm:text-2xl lg:text-4xl">
-              Product Category *
+              Product Category<span className="text-red-600">*</span>
             </h2>
             <Dropdown options={CategoryData} placeholder="Select a Category" />
           </div>
@@ -59,7 +59,7 @@ export default function Onboarding() {
           </h1>
           <div className="flex flex-col justify-start gap-2 align-middle">
             <h2 className="font-[Arial] text:lg sm:text-2xl font-bold lg:text-4xl">
-              Primary Trade Route *
+              Primary Trade Route<span className="text-red-600">*</span>
             </h2>
             <input
               type="text"
@@ -75,7 +75,7 @@ export default function Onboarding() {
           </h1>
           <div className="flex flex-col justify-start gap-2 align-middle">
             <h2 className="font-[Arial] text-lg sm:text-2xl font-bold lg:text-4xl">
-              Annual Export Volume (Units) *
+              Annual Export Volume (Units)<span className="text-red-600">*</span>
             </h2>
             <input
               type="number"
