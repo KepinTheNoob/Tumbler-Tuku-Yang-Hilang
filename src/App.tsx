@@ -4,6 +4,7 @@ import { auth } from "./firebase";
 import Login from "./Login";
 import SignUp from "./SignUp";
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import Onboarding from "./pages/onboarding";
 
 function AppContent() {
   const [user, setUser] = useState<any>(null);
@@ -32,7 +33,7 @@ function AppContent() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#4F70FD]">
-        <div className="text-white text-2xl">Loading...</div>
+        <div className="text-2xl text-white">Loading...</div>
       </div>
     );
   }
@@ -47,7 +48,7 @@ function AppContent() {
             <span className="text-sm">Welcome, {user.email}</span>
             <button
               onClick={handleLogout}
-              className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg text-sm font-semibold"
+              className="px-4 py-2 text-sm font-semibold bg-red-500 rounded-lg hover:bg-red-600"
             >
               Logout
             </button>
@@ -64,9 +65,9 @@ function AppContent() {
                 path="/"
                 element={
                   <div className="min-h-screen flex items-center justify-center bg-[#4F70FD]">
-                    <div className="bg-white p-10 rounded-2xl shadow-lg text-center">
-                      <h1 className="text-3xl font-bold mb-4">Welcome to Xporade!</h1>
-                      <p className="text-gray-600 mb-6">You are logged in as: {user.email}</p>
+                    <div className="p-10 text-center bg-white shadow-lg rounded-2xl">
+                      <h1 className="mb-4 text-3xl font-bold">Welcome to Xporade!</h1>
+                      <p className="mb-6 text-gray-600">You are logged in as: {user.email}</p>
                       <button
                         onClick={handleLogout}
                         className="bg-[#4F70FD] text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-600"
@@ -77,8 +78,8 @@ function AppContent() {
                   </div>
                 }
               />
-              <Route path="/login" element={<div className="min-h-screen flex items-center justify-center"><p>You are already logged in. <a href="/" className="text-blue-600 underline">Go to home</a></p></div>} />
-              <Route path="/signup" element={<div className="min-h-screen flex items-center justify-center"><p>You are already logged in. <a href="/" className="text-blue-600 underline">Go to home</a></p></div>} />
+              <Route path="/login" element={<div className="flex items-center justify-center min-h-screen"><p>You are already logged in. <a href="/" className="text-blue-600 underline">Go to home</a></p></div>} />
+              <Route path="/signup" element={<div className="flex items-center justify-center min-h-screen"><p>You are already logged in. <a href="/" className="text-blue-600 underline">Go to home</a></p></div>} />
             </>
           ) : (
             <>
@@ -86,6 +87,7 @@ function AppContent() {
               <Route path="/" element={<Login />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
+              <Route path="/onboarding" element={<Onboarding />} />
             </>
           )}
         </Route>
