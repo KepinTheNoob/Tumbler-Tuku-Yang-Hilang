@@ -16,7 +16,8 @@ export default function Login() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setMessage("Login Success!");
-      setTimeout(() => navigate("/"), 1000);
+      setLoading(false);
+      navigate("/");
     } catch (error: any) {
       setMessage(error.message);
       setLoading(false);

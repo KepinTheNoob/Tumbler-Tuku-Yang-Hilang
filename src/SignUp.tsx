@@ -1,24 +1,49 @@
 import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "./firebase";
+import {
+  createUserWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
+import { auth, db } from "./firebase";
 import { useNavigate } from "react-router-dom";
+import { doc, setDoc } from "firebase/firestore";
 
 export default function SignUp() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [location, setLocation] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (password !== confirmPassword)
+      return setMessage("Password does not match");
+
     setLoading(true);
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      await setDoc(doc(db, "users", user.uid), {
+        name,
+        location,
+        email,
+        createdAt: new Date(),
+      });
+
+      await signOut(auth); // tunggu sampai user benar-benar keluar
+
       setMessage("Sign Up Success!");
-      setTimeout(() => navigate("/"), 1000);
-    } catch (error: any) {
-      setMessage(error.message);
+      navigate("/login", { replace: true }); // baru redirect
+    } catch (err: any) {
+      setMessage(err.message);
       setLoading(false);
     }
   };
@@ -75,7 +100,7 @@ export default function SignUp() {
           >
             <input
               type="text"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               placeholder="Name"
               className="w-full p-4 rounded-xl border-2 border-black focus:outline-none"
             />
@@ -88,6 +113,13 @@ export default function SignUp() {
             />
 
             <input
+              type="location"
+              onChange={(e) => setLocation(e.target.value)}
+              placeholder="Location"
+              className="w-full p-4 rounded-xl border-2 border-black focus:outline-none"
+            />
+
+            <input
               type="password"
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
@@ -96,7 +128,7 @@ export default function SignUp() {
 
             <input
               type="password"
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirm Password"
               className="w-full p-4 rounded-xl border-2 border-black focus:outline-none"
             />
@@ -120,7 +152,11 @@ export default function SignUp() {
 
           {/* Message */}
           {message && (
-            <p className={`mt-4 text-sm ${message.includes("Success") ? "text-green-600" : "text-red-600"}`}>
+            <p
+              className={`mt-4 text-sm ${
+                message.includes("Success") ? "text-green-600" : "text-red-600"
+              }`}
+            >
               {message}
             </p>
           )}
