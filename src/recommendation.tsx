@@ -1,7 +1,21 @@
+import { useLocation } from "react-router-dom";
 import Footer from "./components/footer";
 import Navbar from "./components/navbar";
 
 export default function HSCodeRecommendation() {
+  const { state } = useLocation();
+
+  if (!state) {
+    return (
+      <div className="p-5">
+        <h1 className="text-xl font-bold">No data received</h1>
+        <p>Please go back and submit the form again.</p>
+      </div>
+    );
+  }
+
+  const data = state;
+
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 font-sans">
       {/* Header */}
@@ -41,36 +55,30 @@ export default function HSCodeRecommendation() {
       <section className="px-8 py-4 space-y-4">
         <h2 className="text-xl font-semibold">Recommended HS Code</h2>
 
-        <div className="border bg-white p-4 rounded-lg shadow-sm">
-          <span className="text-xs bg-blue-600 text-white px-2 py-1 rounded">
-            Best Match
-          </span>
-          <h3 className="text-2xl font-bold text-blue-700 mt-2">0901.21.00</h3>
-          <p className="text-gray-600">
-            Coffee, not roasted, not decaffeinated
-          </p>
-          <div className="flex justify-between items-center mt-2">
-            <span className="text-green-600 font-bold text-lg">
-              95% Confidence
-            </span>
-            <button className="px-3 py-1 bg-blue-600 text-white rounded-md">
-              Select This Code
-            </button>
-          </div>
-        </div>
+        {data.recommended_hs_codes.map((item: any, index: number) => (
+          <div key={index} className="border bg-white p-4 rounded-lg shadow-sm">
+            {index === 0 && (
+              <span className="text-xs bg-blue-600 text-white px-2 py-1 rounded">
+                Best Match
+              </span>
+            )}
 
-        <div className="border bg-white p-4 rounded-lg shadow-sm">
-          <h3 className="text-2xl font-bold text-blue-700">0901.11.00</h3>
-          <p className="text-gray-600">Coffee, not roasted, decaffeinated</p>
-          <div className="flex justify-between items-center mt-2">
-            <span className="text-green-600 font-bold text-lg">
-              75% Confidence
-            </span>
-            <button className="px-3 py-1 bg-blue-600 text-white rounded-md">
-              Select This Code
-            </button>
+            <h3 className="text-2xl font-bold text-blue-700 mt-2">
+              {item.hs_code}
+            </h3>
+
+            <p className="text-gray-600">{item.description}</p>
+
+            <div className="flex justify-between items-center mt-2">
+              <span className="text-green-600 font-bold text-lg">
+                {item.confidence}% Confidence
+              </span>
+              <button className="px-3 py-1 bg-blue-600 text-white rounded-md">
+                Select This Code
+              </button>
+            </div>
           </div>
-        </div>
+        ))}
       </section>
 
       {/* Summary and Regulations */}
@@ -80,24 +88,26 @@ export default function HSCodeRecommendation() {
           <h3 className="text-xl font-semibold mb-4">Product Summary</h3>
           <ul className="space-y-2 text-gray-700">
             <li>
-                <div className="flex gap-1">
-                    <div>
-                        <img src="Img_Recommendation/cube.png" alt="" />
-                    </div>
-                    <div>
-                        <h1>Product Name</h1>
-                        <p>Organic Coffee Beans</p>
-                    </div>
+              <div className="flex gap-1">
+                <div>
+                  <img src="Img_Recommendation/cube.png" alt="" />
                 </div>
+                <div>
+                  <h1>Product Name</h1>
+                  <p>{data.product_summary.product_name}</p>
+                </div>
+              </div>
             </li>
             <li>
-              <strong>Materials:</strong> Arabica Coffee
+              <strong>Materials:</strong>{" "}
+              {data.product_summary.materials ?? "—"}
             </li>
             <li>
-              <strong>Category:</strong> Food & Beverages
+              <strong>Category:</strong> {data.product_summary.category}
             </li>
             <li>
-              <strong>Destination Country:</strong> United States
+              <strong>Destination Country:</strong>{" "}
+              {data.product_summary.destination_country}
             </li>
           </ul>
         </div>
@@ -105,8 +115,10 @@ export default function HSCodeRecommendation() {
         {/* Export Readiness */}
         <div className="bg-[#FFF2D7] p-6 rounded-lg shadow-sm">
           <h3 className="text-xl font-semibold mb-4">Export Readiness Score</h3>
-          <div className="text-5xl font-bold text-yellow-500">75%</div>
-          <p className="text-[#D3A14A]">Needs Attention</p>
+          <div className="text-5xl font-bold text-yellow-500">
+            {data.export_readiness.score_percentage}%
+          </div>
+          <p className="text-[#D3A14A]">{data.export_readiness.status}</p>
         </div>
       </section>
 
@@ -139,110 +151,20 @@ export default function HSCodeRecommendation() {
             </h3>
           </div>
 
-          <div className="space-y-4">
-            {/* Regulation Item 1 */}
-            <div className="p-4 bg-sky-50/50 border border-sky-100 rounded-lg flex gap-3 items-start">
-              {/* Icon: Alert Triangle (Red) */}
-              <svg
-                className="text-red-500 shrink-0 mt-0.5"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-                <line x1="12" y1="9" x2="12" y2="13" />
-                <line x1="12" y1="17" x2="12.01" y2="17" />
-              </svg>
+          {data.export_regulations.map((reg: any, idx: any) => (
+            <div
+              key={idx}
+              className="p-4 bg-sky-50 border rounded-lg flex gap-3"
+            >
               <div>
-                <div className="flex flex-wrap items-center gap-2 mb-1">
-                  <span className="font-semibold text-gray-800 text-sm">
-                    FDA Food Facility Registration
-                  </span>
-                  <span className="bg-red-500 text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wide">
-                    Required
-                  </span>
-                </div>
-                <p className="text-xs text-gray-600 leading-relaxed">
-                  All food facilities that manufacture, process, pack, or hold
-                  food for human or animal consumption in the U.S. must register
-                  with FDA.
-                </p>
+                <span className="font-semibold">{reg.name}</span>
+                <span className="ml-2 px-2 py-1 text-xs rounded bg-red-500 text-white">
+                  {reg.requirement}
+                </span>
+                <p className="text-xs text-gray-600">{reg.notes}</p>
               </div>
             </div>
-
-            {/* Regulation Item 2 */}
-            <div className="p-4 bg-sky-50/50 border border-sky-100 rounded-lg flex gap-3 items-start">
-              {/* Icon: Alert Triangle (Red) */}
-              <svg
-                className="text-red-500 shrink-0 mt-0.5"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-                <line x1="12" y1="9" x2="12" y2="13" />
-                <line x1="12" y1="17" x2="12.01" y2="17" />
-              </svg>
-              <div>
-                <div className="flex flex-wrap items-center gap-2 mb-1">
-                  <span className="font-semibold text-gray-800 text-sm">
-                    Phytosanitary Certificate
-                  </span>
-                  <span className="bg-red-500 text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wide">
-                    Required
-                  </span>
-                </div>
-                <p className="text-xs text-gray-600 leading-relaxed">
-                  Required for plant-based products to ensure they meet the
-                  importing country's plant health standards.
-                </p>
-              </div>
-            </div>
-
-            {/* Regulation Item 3 */}
-            <div className="p-4 bg-yellow-50/50 border border-yellow-100 rounded-lg flex gap-3 items-start">
-              {/* Icon: Alert Triangle (Yellow) */}
-              <svg
-                className="text-yellow-600 shrink-0 mt-0.5"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-                <line x1="12" y1="9" x2="12" y2="13" />
-                <line x1="12" y1="17" x2="12.01" y2="17" />
-              </svg>
-              <div>
-                <div className="flex flex-wrap items-center gap-2 mb-1">
-                  <span className="font-semibold text-gray-800 text-sm">
-                    Organic Certification (USDA)
-                  </span>
-                  <span className="bg-yellow-500 text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wide">
-                    Attention
-                  </span>
-                </div>
-                <p className="text-xs text-gray-600 leading-relaxed">
-                  If labeled as organic, products must be certified by a
-                  USDA-accredited certifying agent.
-                </p>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
 
         {/* --- Card 2: Export Checklist --- */}
@@ -285,82 +207,14 @@ export default function HSCodeRecommendation() {
 
           <div className="space-y-3">
             {/* Checklist Item 1 (Complete) */}
-            <div className="flex gap-3 bg-green-50 p-4 rounded-lg border border-green-100 items-start">
-              <div className="mt-0.5 text-green-600 shrink-0">
-                {/* Icon: Check Circle (Filled) */}
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  stroke="none"
-                >
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-                </svg>
+            {data.export_readiness.checklist.map((item: any, idx: any) => (
+              <div key={idx} className="flex gap-3 p-4 rounded-lg border">
+                <div>{item.completed ? "✅" : "⭕"}</div>
+                <div>
+                  <p className="text-sm font-semibold">{item.title}</p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm font-bold text-gray-800">
-                  Product Classification Complete
-                </p>
-                <p className="text-xs text-gray-600 mt-0.5">
-                  HS Code has been identified and verified
-                </p>
-              </div>
-            </div>
-
-            {/* Checklist Item 2 (Incomplete) */}
-            <div className="flex gap-3 bg-sky-50/30 p-4 rounded-lg border border-sky-100 items-start">
-              <div className="mt-0.5 text-gray-400 shrink-0">
-                {/* Icon: Circle (Outline) */}
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                </svg>
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-700">
-                  Certificate of Origin
-                </p>
-                <p className="text-xs text-gray-500 mt-0.5">
-                  COO from authorized Indonesian chamber
-                </p>
-              </div>
-            </div>
-
-            {/* Checklist Item 3 (Incomplete) */}
-            <div className="flex gap-3 bg-sky-50/30 p-4 rounded-lg border border-sky-100 items-start">
-              <div className="mt-0.5 text-gray-400 shrink-0">
-                {/* Icon: Circle (Outline) */}
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                </svg>
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-700">
-                  Phytosanitary Certificate
-                </p>
-                <p className="text-xs text-gray-500 mt-0.5">
-                  Plant health inspection certificate
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>

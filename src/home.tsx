@@ -10,6 +10,26 @@ export default function Home() {
       <Navbar />
       {/* Hero Section */}
       <section className="py-20 bg-[#F3FAFF] px-20">
+        <img
+          src="Img_Home/triangle.png"
+          className="absolute top-20 right-0 h-[14vh] w-auto pointer-events-none"
+        />
+
+        <img
+          src="Img_Home/triangle2.png"
+          className="absolute bottom-40 left-0 h-[23vh] w-auto pointer-events-none"
+        />
+
+        <img
+          src="Img_Home/rectangle.png"
+          className="absolute top-20 left-0 h-[8vh] w-auto pointer-events-none"
+        />
+
+        <img
+          src="Img_Home/rectangle2.png"
+          className="absolute bottom-20 right-0 h-[8vh] w-auto pointer-events-none"
+        />
+
         <div className="max-w-4xl mx-auto text-left">
           <h1 className="text-4xl md:text-5xl font-bold text-[#1A66A2] leading-tight animate-fade-in">
             Empowering UMKM to <br /> grow beyond the borders
@@ -37,6 +57,11 @@ export default function Home() {
               src="Img_Home/building.png"
               alt="Building"
               className="w-full"
+            />
+
+            <img
+              src="Img_Home/rectangle3.png"
+              className="absolute bottom-0 left-0 h-[10vh] w-auto pointer-events-none"
             />
           </div>
         </div>
@@ -102,6 +127,42 @@ before:bg-[linear-gradient(-9deg,transparent_40%,#7993FE_40%,#7993FE_65%,transpa
             rules. Mistakes can lead to delays, fees, or goods being rejected at
             customs.
           </p>
+        </div>
+      </section>
+
+      <section
+        className="relative py-16 px-4 
+before:absolute before:inset-1 before:top-20 before:left-0 before:right-0 before:pointer-events-none before:-z-10
+before:bg-[linear-gradient(-9deg,transparent_40%,#7993FE_40%,#7993FE_65%,transparent_65%)] before:opacity-[0.17]"
+      >
+        <h2 className="text-3xl font-bold text-center text-[#1A66A2] mb-10">
+          Key Points
+        </h2>
+
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center relative">
+          {[
+            {
+              title: "High Recommendation Accuracy",
+              img: "Img_Home/plane.png",
+            },
+            { title: "Regulations by Country", img: "Img_Home/globe.png" },
+            {
+              title: "Ready to Use for Any Product",
+              img: "Img_Home/cube.png",
+            },
+          ].map((item, idx) => (
+            <div
+              key={idx}
+              className="p-6 bg-[#F5F5F5] shadow rounded-xl hover:shadow-lg transition duration-300 animate-slide-up"
+            >
+              <img
+                src={item.img}
+                className="w-9 h-auto mx-auto mb-4 object-contain"
+                alt={item.title}
+              />
+              <h3 className="font-semibold text-gray-800">{item.title}</h3>
+            </div>
+          ))}
         </div>
       </section>
 
