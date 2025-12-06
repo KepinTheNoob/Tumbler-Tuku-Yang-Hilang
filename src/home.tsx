@@ -14,10 +14,7 @@ export default function Home() {
             </a>
           </li>
           <li>
-            <a href="#">Features</a>
-          </li>
-          <li>
-            <a href="#">Pricing</a>
+            <a href="#">Form</a>
           </li>
           <li>
             <a href="#">About</a>
@@ -153,19 +150,11 @@ before:bg-[linear-gradient(-9deg,transparent_40%,#7993FE_40%,#7993FE_65%,transpa
             <img src="Img_Home/building3.png" alt="" />
           </div>
         </div>
-
-        <div className="mt-10 flex justify-center animate-fade-in">
-          <img
-            src="https://via.placeholder.com/600x300"
-            className="rounded-lg shadow"
-          />
-        </div>
       </section>
 
       {/* CTA Section */}
       <section
-        className="py-16 bg-[#2F77B0] text-white text-center px-4"
-        style={{ backgroundImage: "url('/Img_Home/background.png')" }}
+        className="py-16 bg-[#2F77B0] text-white text-center px-4 bg-[url('/Img_Home/background.png')] bg-no-repeat bg-cover bg-center"
       >
         <div className="text-left max-w-xl">
           <p className="text-lg">Let's Move Forward Together</p>
@@ -227,7 +216,7 @@ before:bg-[linear-gradient(-9deg,transparent_40%,#7993FE_40%,#7993FE_65%,transpa
                 <img
                   src="/Img_Home/location.png"
                   alt=""
-                  className="h-[10vh] w-auto"
+                  className="h-[5vh] w-auto"
                 />
 
                 <p className="text-white">
