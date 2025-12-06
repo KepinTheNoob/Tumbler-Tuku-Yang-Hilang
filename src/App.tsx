@@ -1,29 +1,28 @@
-import { useEffect, useState } from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "./firebase";
-import Login from "./Login";
-import SignUp from "./SignUp";
-import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate, Link } from "react-router-dom";
+import { AuthProvider, useAuth } from "./auth/AuthContext";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
+import Profile from "./pages/Profile";
+import ProtectedRoute from "./auth/ProtectedRoute";
+import Homepage from "./pages/Homepage";
+import EditProfile from "./EditProfile";
 import Onboarding from "./pages/onboarding";
 
-function AppContent() {
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+function AppRoutes() {
+  const { user, loading, logout } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#4F70FD]">
+        <div className="text-white text-2xl">Loading...</div>
+      </div>
+    );
+  }
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
-      setUser(null);
+      await logout();
       navigate("/login");
     } catch (error) {
       console.error("Logout error:", error);
@@ -40,12 +39,20 @@ function AppContent() {
 
   return (
     <>
-      {/* Top Navigation Bar */}
       {user && (
         <nav className="bg-[#4F70FD] text-white p-4 flex justify-between items-center">
           <div className="text-xl font-bold">Xporade</div>
           <div className="flex items-center gap-4">
             <span className="text-sm">Welcome, {user.email}</span>
+
+            <Link to="/profile">
+              <div className="w-10 h-10 bg-[#FF009D] rounded-full relative flex items-center justify-center border-2 border-white">
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                  <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z" />
+                </svg>
+              </div>
+            </Link>
+
             <button
               onClick={handleLogout}
               className="px-4 py-2 text-sm font-semibold bg-red-500 rounded-lg hover:bg-red-600"
@@ -55,31 +62,45 @@ function AppContent() {
           </div>
         </nav>
       )}
-
       <Routes>
         <Route>
-          {user ? (
-            <>
-              {/* Home Page untuk user yang sudah login */}
-              <Route
+            {user ? (
+              <>
+                <Route
                 path="/"
                 element={
-                  <div className="min-h-screen flex items-center justify-center bg-[#4F70FD]">
-                    <div className="p-10 text-center bg-white shadow-lg rounded-2xl">
-                      <h1 className="mb-4 text-3xl font-bold">Welcome to Xporade!</h1>
-                      <p className="mb-6 text-gray-600">You are logged in as: {user.email}</p>
-                      <button
-                        onClick={handleLogout}
-                        className="bg-[#4F70FD] text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-600"
-                      >
-                        Logout
-                      </button>
-                    </div>
-                  </div>
+                  <ProtectedRoute>
+                    <Homepage/>
+                  </ProtectedRoute>
                 }
               />
-              <Route path="/login" element={<div className="flex items-center justify-center min-h-screen"><p>You are already logged in. <a href="/" className="text-blue-600 underline">Go to home</a></p></div>} />
-              <Route path="/signup" element={<div className="flex items-center justify-center min-h-screen"><p>You are already logged in. <a href="/" className="text-blue-600 underline">Go to home</a></p></div>} />
+
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/profile/edit"
+                element={
+                  <ProtectedRoute>
+                    <EditProfile />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/onboarding"
+                element={
+                  <ProtectedRoute>
+                    <Onboarding />
+                  </ProtectedRoute>
+                }
+              />
             </>
           ) : (
             <>
@@ -87,7 +108,6 @@ function AppContent() {
               <Route path="/" element={<Login />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
-              <Route path="/onboarding" element={<Onboarding />} />
             </>
           )}
         </Route>
@@ -99,7 +119,9 @@ function AppContent() {
 export default function App() {
   return (
     <BrowserRouter>
-      <AppContent />
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
     </BrowserRouter>
   );
 }

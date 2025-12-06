@@ -1,55 +1,80 @@
 import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "./firebase";
+import {
+  createUserWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
+import { auth, db } from "./firebase";
 import { useNavigate } from "react-router-dom";
+import { doc, setDoc } from "firebase/firestore";
 
-export default function Login() {
+export default function SignUp() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [location, setLocation] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (password !== confirmPassword)
+      return setMessage("Password does not match");
+
     setLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      setMessage("Login Success!");
-      setTimeout(() => navigate("/"), 1000);
-    } catch (error: any) {
-      setMessage(error.message);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      await setDoc(doc(db, "users", user.uid), {
+        name,
+        location,
+        email,
+        createdAt: new Date(),
+      });
+
+      await signOut(auth); // tunggu sampai user benar-benar keluar
+
+      setMessage("Sign Up Success!");
+      navigate("/login", { replace: true }); // baru redirect
+    } catch (err: any) {
+      setMessage(err.message);
       setLoading(false);
     }
   };
 
   return (
     <>
-      <div className="min-h-screen flex items-center justify-center bg-[#4F70FD] relative overflow-hidden">
+      <div className="min-h-screen w-full flex items-center justify-center bg-[#4F70FD] relative py-20">
         {/* Decorative Elements - Top Right */}
         <img
-          src={`Img_Login/Group 11.png`}
-          className="absolute top-[10px] right-[69px] w-[80px] select-none pointer-events-none"
+          src={`Img_SignUp/Group.png`}
+          className="absolute top-[30px] right-[80px] w-[60px] select-none pointer-events-none"
           alt="decoration"
         />
 
         {/* Decorative Elements - Bottom Left */}
         <img
-          src={`Img_Login/Group 10.png`}
-          className="absolute bottom-[10px] left-[69px] w-[80px] select-none pointer-events-none"
+          src={`Img_SignUp/Group-1.png`}
+          className="absolute bottom-[30px] left-[80px] w-[60px] select-none pointer-events-none"
           alt="decoration"
         />
 
         {/* Decorative Elements - Top Left */}
         <img
-          src={`Img_Login/Vector.png`}
+          src={`Img_SignUp/Vector.png`}
           className="absolute top-[0px] left-[0px] w-[140px] select-none pointer-events-none"
           alt="decoration"
         />
 
         {/* Decorative Elements - Bottom Right */}
         <img
-          src={`Img_Login/Group 7.png`}
+          src={`Img_SignUp/Group 15.png`}
           className="absolute bottom-[0px] right-[40px] w-[100px] select-none pointer-events-none"
           alt="decoration"
         />
@@ -64,7 +89,7 @@ export default function Login() {
           </div>
 
           {/* Title */}
-          <h1 className="text-3xl font-bold mt-12">Login</h1>
+          <h1 className="text-3xl font-bold mt-12">Register</h1>
           <p className="text-gray-600 mt-1 mb-6">Welcome Back to Xporade!</p>
 
           {/* Form */}
@@ -74,18 +99,37 @@ export default function Login() {
             onSubmit={handleSubmit}
           >
             <input
+              type="text"
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Name"
+              className="w-full p-4 rounded-xl border-2 border-black focus:outline-none"
+            />
+
+            <input
               type="email"
-              value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
               className="w-full p-4 rounded-xl border-2 border-black focus:outline-none"
             />
 
             <input
+              type="location"
+              onChange={(e) => setLocation(e.target.value)}
+              placeholder="Location"
+              className="w-full p-4 rounded-xl border-2 border-black focus:outline-none"
+            />
+
+            <input
               type="password"
-              value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
+              className="w-full p-4 rounded-xl border-2 border-black focus:outline-none"
+            />
+
+            <input
+              type="password"
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Confirm Password"
               className="w-full p-4 rounded-xl border-2 border-black focus:outline-none"
             />
 
@@ -94,21 +138,25 @@ export default function Login() {
               disabled={loading}
               className="w-full bg-[#4F70FD] text-white py-3 rounded-xl text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? "Logging in..." : "Login"}
+              {loading ? "Creating Account..." : "Create Account"}
             </button>
           </form>
 
           {/* Sign Up */}
           <p className="mt-5 text-black text-sm">
-            Don't have an account?{" "}
-            <a href="/signup" className="text-blue-600 underline">
-              Sign Up
+            Already have an account?{" "}
+            <a href="/login" className="text-blue-600 underline">
+              Sign in
             </a>
           </p>
 
           {/* Message */}
           {message && (
-            <p className={`mt-4 text-sm ${message.includes("Success") ? "text-green-600" : "text-red-600"}`}>
+            <p
+              className={`mt-4 text-sm ${
+                message.includes("Success") ? "text-green-600" : "text-red-600"
+              }`}
+            >
               {message}
             </p>
           )}
