@@ -1,7 +1,10 @@
 import Footer from "./components/footer";
 import Navbar from "./components/navbar";
+import { useAuth } from "./auth/AuthContext";
 
 export default function Home() {
+  const { user } = useAuth();
+
   return (
     <div className="font-sans text-gray-800">
       <Navbar />
@@ -19,9 +22,15 @@ export default function Home() {
             Indonesian products reach global shelves.
           </p>
 
-          <button className="mt-6 px-8 py-2 bg-[#35B7FA] text-white rounded-xl hover:bg-blue-700 transition animate-fade-in delay-300 font-semibold">
-            Register
-          </button>
+          {user ? (
+            <></>
+          ) : (
+            <a href="/signup">
+              <button className="mt-6 px-8 py-2 bg-[#35B7FA] text-white rounded-xl hover:bg-blue-700 transition animate-fade-in delay-300 font-semibold">
+                Register
+              </button>
+            </a>
+          )}
 
           <div className="mt-10 animate-fade-in delay-500">
             <img
@@ -133,9 +142,7 @@ before:bg-[linear-gradient(-9deg,transparent_40%,#7993FE_40%,#7993FE_65%,transpa
       </section>
 
       {/* CTA Section */}
-      <section
-        className="py-16 bg-[#2F77B0] text-white text-center px-4 bg-[url('/Img_Home/background.png')] bg-no-repeat bg-cover bg-center"
-      >
+      <section className="py-16 bg-[#2F77B0] text-white text-center px-4 bg-[url('/Img_Home/background.png')] bg-no-repeat bg-cover bg-center">
         <div className="text-left max-w-xl">
           <p className="text-lg">Let's Move Forward Together</p>
           <h2 className="text-4xl font-semibold leading-tight">
@@ -146,9 +153,11 @@ before:bg-[linear-gradient(-9deg,transparent_40%,#7993FE_40%,#7993FE_65%,transpa
           </p>
         </div>
         <div className="flex md:justify-end w-full md:w-auto">
-          <button className="mt-6 px-8 py-3 bg-[#253D6D] text-white font-semibold rounded-xl hover:opacity-90 transition">
-            Get Started
-          </button>
+          <a href="/onboarding">
+            <button className="mt-6 px-8 py-3 bg-[#253D6D] text-white font-semibold rounded-xl hover:opacity-90 transition">
+              Get Started
+            </button>
+          </a>
         </div>
       </section>
 

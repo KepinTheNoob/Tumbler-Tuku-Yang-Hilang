@@ -1,8 +1,5 @@
 import { useState } from "react";
-import {
-  createUserWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth, db } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { doc, setDoc } from "firebase/firestore";
@@ -13,6 +10,7 @@ export default function SignUp() {
   const [location, setLocation] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -101,7 +99,7 @@ export default function SignUp() {
             <input
               type="text"
               onChange={(e) => setName(e.target.value)}
-              placeholder="Name"
+              placeholder="Name (min. 3 characters)"
               className="w-full p-4 rounded-xl border-2 border-black focus:outline-none"
             />
 
@@ -115,16 +113,24 @@ export default function SignUp() {
             <input
               type="location"
               onChange={(e) => setLocation(e.target.value)}
-              placeholder="Location"
+              placeholder="Your Location"
               className="w-full p-4 rounded-xl border-2 border-black focus:outline-none"
             />
 
-            <input
-              type="password"
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              className="w-full p-4 rounded-xl border-2 border-black focus:outline-none"
-            />
+            <div>
+              <input
+                type="password"
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password (min. 6 characters)"
+                className="w-full p-4 rounded-xl border-2 border-black focus:outline-none"
+              />
+              <button
+                type="button"
+                className="absolute right-4 top-4 text-sm"
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+              </button>
+            </div>
 
             <input
               type="password"

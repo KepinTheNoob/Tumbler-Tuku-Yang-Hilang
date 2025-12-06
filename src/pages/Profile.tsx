@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { db } from "../firebase";
 import { doc, onSnapshot } from "firebase/firestore";
 import { useAuth } from "../auth/AuthContext";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, Navigate } from "react-router-dom";
+import Navbar from "../components/navbar";
 
 export default function Profile() {
   const [userData, setUserData] = useState({
@@ -12,7 +13,7 @@ export default function Profile() {
   });
 
   const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const locationRouter = useLocation();
   const [showSuccess, setShowSuccess] = useState(false);
   const navigate = useNavigate();
@@ -25,9 +26,7 @@ export default function Profile() {
         setShowSuccess(false);
         try {
           navigate(locationRouter.pathname, { replace: true, state: {} });
-        } catch (e) {
-
-        }
+        } catch (e) {}
       }, 5000);
 
       return () => clearTimeout(t);
@@ -77,8 +76,13 @@ export default function Profile() {
     );
   }
 
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
   return (
     <>
+      <Navbar />
       <div className="mt-10 flex justify-center items-center">
         <div className="w-32 h-32 bg-[#FF009D] rounded-full relative flex items-center justify-center border-4 border-black">
           <svg width="90" height="90" fill="white" viewBox="0 0 24 24">
@@ -95,12 +99,18 @@ export default function Profile() {
             <h2 className="text-xl font-semibold text-gray-800">
               Profile Information
             </h2>
-            <Link to="/profile/edit">
-              <button className="flex items-center px-2 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-500 rounded-lg hover:bg-gray-50">
-                <img src="/Img_Profile/Edit.png" alt="" className="h-4 mr-1" />
-                <p>Edit Profile</p>
-              </button>
-            </Link>
+            <div className="flex items-center gap-2">
+              <Link to="/profile/edit">
+                <button className="flex items-center p-2 text-sm font-medium text-gray-700 bg-white border border-gray-500 rounded-lg hover:bg-gray-200">
+                  <img
+                    src="/Img_Profile/Edit.png"
+                    alt=""
+                    className="h-4 mr-1"
+                  />
+                  <p>Edit Profile</p>
+                </button>
+              </Link>
+            </div>
           </div>
 
           {userData ? (
@@ -144,6 +154,20 @@ export default function Profile() {
             <div>Tidak ada data</div>
           )}
         </div>
+
+        <button
+          onClick={async () => {
+            try {
+              await logout();
+              navigate("/login");
+            } catch (err) {
+              console.error("Logout error:", err);
+            }
+          }}
+          className="mt-2 px-3 py-2 text-md font-medium text-white bg-red-500 rounded-lg hover:bg-red-600"
+        >
+          Logout
+        </button>
       </div>
 
       {showSuccess && (
