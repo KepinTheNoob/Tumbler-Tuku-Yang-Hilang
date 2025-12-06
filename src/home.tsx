@@ -14,7 +14,7 @@ export default function Home() {
             </a>
           </li>
           <li>
-            <a href="#">Form</a>
+            <a href="/onboarding">Form</a>
           </li>
           <li>
             <a href="#">About</a>

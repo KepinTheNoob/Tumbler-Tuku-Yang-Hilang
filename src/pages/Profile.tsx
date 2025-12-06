@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { db } from "./firebase";
+import { db } from "../firebase";
 import { doc, onSnapshot } from "firebase/firestore";
-import { useAuth } from "./auth/AuthContext";
+import { useAuth } from "../auth/AuthContext";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export default function Profile() {
