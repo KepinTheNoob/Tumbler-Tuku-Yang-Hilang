@@ -1,13 +1,18 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Footer from "../components/footer";
 import Navbar from "../components/navbar";
 
 export default function HSCodeRecommendation() {
   const { state } = useLocation();
+  const navigate = useNavigate();
 
   if (!state) {
     return (
       <div className="p-5">
+        <button onClick={() => navigate("/onboarding")} className="flex items-center">
+            <img src="/Img_Profile/Back_button.png" alt="Back" className="h-6 mr-2" />
+            <p className="text-md font-semibold">Back</p>
+        </button>
         <h1 className="text-xl font-bold">No data received</h1>
         <p>Please go back and submit the form again.</p>
       </div>

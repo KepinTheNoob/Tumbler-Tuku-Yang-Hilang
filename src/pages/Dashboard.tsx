@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     BarChart, Bar, Legend,
 } from 'recharts';
-import Navbar from "../component/navbar";
 import Footer from "../components/footer";
+import Navbar from '../components/navbar';
+import { useAuth } from '../auth/AuthContext';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '../firebase';
 
 // --- 1. INTERFACES DAN DATA DUMMY ---
 
@@ -80,18 +83,50 @@ const TopCountriesBarChart: React.FC = () => (
 // --- 3. KOMPONEN DASHBOARD UTAMA (DIMODIFIKASI) ---
 
 export default function Dashboard() {
+    const {user, loading: authLoading} = useAuth();
+
+    const [userName, setUsername] = useState<String>('Guest');
+    const [loadingData, setLoadingData] = useState<boolean>(true);
+
+    useEffect(() => {
+        if (user && user.uid) {
+            setLoadingData(true);
+            const userRef = doc(db, "users", user.uid);
+            
+            const unsub = onSnapshot(userRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    // Ambil nama dari Firestore
+                    setUsername(snapshot.data().name || user.email || 'User');
+                } else {
+                    // Dokumen user belum ada
+                    setUsername(user.email || 'User');
+                }
+                setLoadingData(false);
+            }, (err) => {
+                console.error("Dashboard data fetch error:", err);
+                setUsername('User'); // Fallback jika ada error
+                setLoadingData(false);
+            });
+
+            return () => unsub(); // Cleanup listener saat komponen di-unmount
+        } else if (!authLoading) {
+             // Jika auth loading selesai dan tidak ada user
+            setUsername('Guest'); 
+            setLoadingData(false);
+        }
+    }, [user, authLoading]);
+
     return (
         <>
             <Navbar />
             <main className="px-8">
                 <header className="space-y-3 py-10">
-                    <h1 className="font-bold text-[Arial] text-3xl text-center sm:text-left">Hello, Ellen</h1>
+                    <h1 className="font-bold text-[Arial] text-3xl text-center sm:text-left">Hello, {userName}</h1>
                     <p className="text-[Arial] text-2xl text-center sm:text-left">Here's an overview of your export analysis activity</p>
                 </header>
                 
                 {/* STATS CARDS */}
                 <section className="grid grid-cols-1 sm:grid-cols-4 xl:grid-cols-4 gap-7 pb-10">
-                    {/* ... (Kotak Statistik yang sudah ada) ... */}
                     {/* Total Analysis */}
                     <div className="flex justify-between align-middle bg-blue-50 flex-row sm:p-9 p-5 border border-gray-500 rounded-lg">
                         <div className="flex justify-start align-middle flex-col gap-3 ">
@@ -230,7 +265,7 @@ export default function Dashboard() {
                     </article>
 
                     {/* QUICK ACTIONS */}
-                    <aside className="border border-gray-500 p-6 rounded-lg mb-2">
+                    <aside className="border border-gray-500 p-6 rounded-lg mb-2 cursor-pointer">
                         <h2 className="font-[Arial] text-2xl text-center sm:text-left font-bold">Quick Actions</h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-6">
                             <div className="gap-1 p-3 border border-gray-400 rounded-lg bg-[#2990E1] text-white hover:text-gray-500 hover:bg-blue-50">
