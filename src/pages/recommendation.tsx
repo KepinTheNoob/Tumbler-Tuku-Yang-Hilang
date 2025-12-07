@@ -21,68 +21,72 @@ export default function HSCodeRecommendation() {
   const navigate = useNavigate();
 
   const handleExportPDF = () => {
-  if (!data) return;
+    if (!data) return;
 
-  const pdf = new jsPDF();
-  const marginLeft = 15;
-  let y = 15;
+    const pdf = new jsPDF();
+    const marginLeft = 15;
+    let y = 15;
 
-  // Header Title
-  pdf.setFont("Helvetica", "bold");
-  pdf.setFontSize(20);
-  pdf.text("HS Code Recommendation Report", marginLeft, y);
-  y += 10;
+    // Header Title
+    pdf.setFont("Helvetica", "bold");
+    pdf.setFontSize(20);
+    pdf.text("HS Code Recommendation Report", marginLeft, y);
+    y += 10;
 
-  // Product Summary
-  pdf.setFontSize(14);
-  pdf.setFont("Helvetica", "bold");
-  pdf.text("Product Summary", marginLeft, y);
-  y += 6;
+    // Product Summary
+    pdf.setFontSize(14);
+    pdf.setFont("Helvetica", "bold");
+    pdf.text("Product Summary", marginLeft, y);
+    y += 6;
 
-  pdf.setDrawColor(220, 220, 220); 
-  pdf.setFillColor(248, 248, 248);
-  pdf.roundedRect(marginLeft, y, 180, 30, 3, 3, "F");
-  y += 10;
+    pdf.setDrawColor(220, 220, 220);
+    pdf.setFillColor(248, 248, 248);
+    pdf.roundedRect(marginLeft, y, 180, 30, 3, 3, "F");
+    y += 10;
 
-  pdf.setFont("Helvetica", "normal");
-  pdf.setFontSize(12);
-  pdf.text(`Product Name: ${data.product_summary.product_name}`, marginLeft + 5, y);
-  y += 7;
-  pdf.text(`Materials: ${data.product_summary.materials}`, marginLeft + 5, y);
-  y += 7;
-  pdf.text(`Category: ${data.product_summary.category}`, marginLeft + 5, y);
-  y += 15;
+    pdf.setFont("Helvetica", "normal");
+    pdf.setFontSize(12);
+    pdf.text(
+      `Product Name: ${data.product_summary.product_name}`,
+      marginLeft + 5,
+      y
+    );
+    y += 7;
+    pdf.text(`Materials: ${data.product_summary.materials}`, marginLeft + 5, y);
+    y += 7;
+    pdf.text(`Category: ${data.product_summary.category}`, marginLeft + 5, y);
+    y += 15;
 
-  // Table Recommend HS Code
-  pdf.setFontSize(14);
-  pdf.setFont("Helvetica", "bold");
-  pdf.text("Recommended HS Codes", marginLeft, y);
-  y += 6;
+    // Table Recommend HS Code
+    pdf.setFontSize(14);
+    pdf.setFont("Helvetica", "bold");
+    pdf.text("Recommended HS Codes", marginLeft, y);
+    y += 6;
 
-  autoTable(pdf, {
-    startY: y,
-    head: [["HS Code", "Confidence (%)", "Description"]],
-    body: data.recommended_hs_codes.map((item: any) => [
-      item.hs_code,
-      item.confidence,
-      item.description ?? "-",
-    ]),
-    styles: {
-      fontSize: 11,
-      cellPadding: 4,
-    },
-    headStyles: {
-      fillColor: [40, 40, 40],
-      textColor: 255,
-      fontStyle: "bold",
-    },
-    alternateRowStyles: {
-      fillColor: [245, 245, 245],
-    },
-  });
+    autoTable(pdf, {
+      startY: y,
+      head: [["HS Code", "Confidence (%)", "Description"]],
+      body: data.recommended_hs_codes.map((item: any) => [
+        item.hs_code,
+        item.confidence,
+        item.description ?? "-",
+      ]),
+      styles: {
+        fontSize: 11,
+        cellPadding: 4,
+      },
+      headStyles: {
+        fillColor: [40, 40, 40],
+        textColor: 255,
+        fontStyle: "bold",
+      },
+      alternateRowStyles: {
+        fillColor: [245, 245, 245],
+      },
+    });
 
-  pdf.save("hs-report.pdf");
-};
+    pdf.save("hs-report.pdf");
+  };
 
   if (!state) {
     return (
@@ -105,6 +109,12 @@ export default function HSCodeRecommendation() {
   }
 
   const data = state;
+  const checklist = data.export_readiness.checklist || [];
+  const totalItems = checklist.length;
+  const completedItems = checklist.filter((item: any) => item.completed).length;
+
+  const progressPercent =
+    totalItems === 0 ? 0 : Math.round((completedItems / totalItems) * 100);
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 font-sans">
@@ -113,7 +123,7 @@ export default function HSCodeRecommendation() {
 
       {/* Title Section */}
       <section className="px-8 py-8 bg-[linear-gradient(to_right,#BFE3FF_0%,#EEF8FF_100%,transparent_100%)]">
-        <a href="#" className="text-sm text-blue-600">
+        <a href="/onboarding" className="text-sm text-blue-600 hover:underline">
           ← Back to input form
         </a>
         <h1 className="text-3xl font-bold mt-4">HS Code Recommendation</h1>
@@ -122,17 +132,6 @@ export default function HSCodeRecommendation() {
         </p>
 
         <div className="flex space-x-4 mt-4" id="report-content">
-          <button
-            onClick={handleShare}
-            className="px-4 py-2 bg-transparent gap-2 text-white rounded-md flex border-2 border-solid"
-          >
-            <span>Share</span>
-            <img
-              src="Img_Recommendation/share.png"
-              alt=""
-              className="h-[25px] w-auto"
-            />
-          </button>
           <button
             onClick={handleExportPDF}
             className="px-4 py-2 bg-[#1F74E2] text-white rounded-md flex items-center space-x-2"
@@ -186,7 +185,7 @@ export default function HSCodeRecommendation() {
                   <img src="Img_Recommendation/cube.png" alt="" />
                 </div>
                 <div>
-                  <h1>Product Name</h1>
+                  <h1 className="font-bold">Product Name</h1>
                   <p>{data.product_summary.product_name}</p>
                 </div>
               </div>
@@ -282,7 +281,7 @@ export default function HSCodeRecommendation() {
                 Export Checklist
               </h3>
               <p className="text-xs text-gray-500 font-medium">
-                1 of 3 items ready
+                {completedItems} of {totalItems} items ready
               </p>
             </div>
           </div>
@@ -291,7 +290,7 @@ export default function HSCodeRecommendation() {
           <div className="w-full bg-gray-100 rounded-full h-1.5 mb-6 mt-2">
             <div
               className="bg-blue-600 h-1.5 rounded-full shadow-sm"
-              style={{ width: "33%" }}
+              style={{ width: `${progressPercent}%` }}
             ></div>
           </div>
 

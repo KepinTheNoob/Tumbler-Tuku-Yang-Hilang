@@ -8,7 +8,6 @@ import Login from './pages/Login'
 import Home from './pages/home'
 import HSCodeRecommendation from './pages/recommendation'
 import Onboarding from './pages/onboarding'
-import Dashboard from './pages/Dashboard'
 import ProtectedRoute from './auth/ProtectedRoute'
 import Profile from './pages/Profile'
 import EditProfile from './pages/EditProfile'
@@ -24,7 +23,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path='/' element={<Home />}/>
           <Route path='/home' element={<Home />}/>
           <Route path='/recommendation' element={<HSCodeRecommendation />}/>
-          <Route path='/dashboard' element={<Dashboard />}/>
           <Route path='/onboarding' element={
             <ProtectedRoute>
               <Onboarding />
