@@ -105,7 +105,7 @@ export default function Onboarding() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: import.meta.env.VITE_API_KEY,
+            Authorization: `Bearer $import{import.meta.env.VITE_API_KEY}`,
           },
           body: JSON.stringify({
             model: "meta-llama/llama-4-maverick-17b-128e-instruct",
@@ -224,19 +224,6 @@ export default function Onboarding() {
               placeholder="e.g., India to United States"
               value={tradeRoute}
               onChange={(e) => setTradeRoute(e.target.value)}
-              required
-            />
-          </div>
-          <div className="flex flex-col justify-start gap-2 align-middle">
-            <h2 className="font-[Arial]  text-lg sm:text-2xl font-bold lg:text-4xl">
-              HS Code *
-            </h2>
-            <input
-              type="text"
-              className="w-full  px-4 py-3 font-[Arial] text-lg sm:text-2xl lg:text-4xl shadow-[1px_1px_6.8px_2px_rgba(0,0,0,0.25)]"
-              placeholder="e.g., 6204.62.0000"
-              value={hsCode}
-              onChange={(e) => setHsCode(e.target.value)}
               required
             />
           </div>
