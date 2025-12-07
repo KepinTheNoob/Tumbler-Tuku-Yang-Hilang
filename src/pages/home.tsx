@@ -135,25 +135,21 @@ before:bg-[linear-gradient(-9deg,transparent_40%,#7993FE_40%,#7993FE_65%,transpa
 before:absolute before:inset-1 before:top-20 before:left-0 before:right-0 before:pointer-events-none before:-z-10
 before:bg-[linear-gradient(-9deg,transparent_40%,#7993FE_40%,#7993FE_65%,transparent_65%)] before:opacity-[0.17]"
       >
-        <h2 className="text-3xl font-bold text-center text-[#1A66A2] mb-10">
-          Key Points
-        </h2>
-
         <div className="relative grid max-w-5xl grid-cols-1 gap-8 mx-auto text-center md:grid-cols-3">
           {[
             {
-              title: "High Recommendation Accuracy",
-              img: "Img_Home/plane.png",
+              title: "Determining the correct HS Code for  products where a small error can result in failure",
+              img: "Img_Home/point.png",
             },
-            { title: "Regulations by Country", img: "Img_Home/globe.png" },
+            { title: "Difference of export documents and requirements between every country", img: "Img_Home/point.png" },
             {
-              title: "Ready to Use for Any Product",
-              img: "Img_Home/cube.png",
+              title: "Lack of mandatory documents for export such as lab tests or permits",
+              img: "Img_Home/point.png",
             },
           ].map((item, idx) => (
             <div
               key={idx}
-              className="p-6 bg-[#F5F5F5] shadow rounded-xl hover:shadow-lg transition duration-300 animate-slide-up"
+              className="p-6 bg-[#BFE8FE] shadow rounded-xl hover:shadow-lg transition duration-300 animate-slide-up"
             >
               <img
                 src={item.img}
