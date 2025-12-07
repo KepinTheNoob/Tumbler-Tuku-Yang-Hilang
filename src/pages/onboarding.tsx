@@ -148,6 +148,7 @@ export default function Onboarding() {
 
   return (
     <>
+      <Navbar />
       <header className="bg-[#2F77B0] flex justify-start align-middle flex-col md:px-16 md:py-11  px-8 py-5 rounded-b-3xl border-t-0">
         <img
           src={`Onboarding/xporade_black_white.png`}

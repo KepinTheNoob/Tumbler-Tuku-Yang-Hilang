@@ -13,7 +13,7 @@ export default function Profile() {
   });
 
   const [loading, setLoading] = useState(true);
-  const { user, logout } = useAuth();
+  const { user, logout, loading: authLoading } = useAuth();
   const locationRouter = useLocation();
   const [showSuccess, setShowSuccess] = useState(false);
   const navigate = useNavigate();
@@ -68,7 +68,8 @@ export default function Profile() {
     setLoading(false);
   }, [user]);
 
-  if (loading) {
+  // show loading while auth state or profile data is loading
+  if (authLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#4F70FD]">
         <div className="text-white text-2xl">Loading...</div>
@@ -76,7 +77,8 @@ export default function Profile() {
     );
   }
 
-  if (!user) {
+  // only redirect when we are sure auth has been resolved and there is no user
+  if (!authLoading && !user) {
     return <Navigate to="/login" replace />;
   }
 
