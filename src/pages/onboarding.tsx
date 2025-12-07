@@ -1,26 +1,16 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Dropdown from "../component/dropdown";
 import Navbar from "../components/navbar";
 import { CategoryData } from "../data/categoryData";
 import { useState } from "react";
-
-type formData = {
-  productName: "Organic Coffee Beans";
-  category: "Food & Beverages";
-  description: "High-quality Arabica coffee beans...";
-  tradeRoute: "Indonesia to United States";
-  hsCode: "0901.21.00";
-  exportVolume: 50000;
-};
 
 export default function Onboarding() {
   const navigate = useNavigate();
 
   const [productName, setProductName] = useState("");
   const [productCategory, setProductCategory] = useState("");
-  const [productDescription, setProductDescription] = useState("");
+  const [productDescription] = useState("");
   const [tradeRoute, setTradeRoute] = useState("");
-  const [hsCode, setHsCode] = useState("");
   const [exportVolume, setExportVolume] = useState("");
 
   const [loading, setLoading] = useState(false);
