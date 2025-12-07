@@ -12,7 +12,7 @@ export default function Footer() {
                 className="h-[15vh] w-auto object-contain mb-4"
               />
               <p className="text-gray-300 text-sm leading-relaxed">
-                We have helped thousands of businesses — from rising UMKM to
+                We have helped thousands of businesses, from rising UMKM to
                 established exporters navigate HS Codes, regulations, and
                 international requirements with accuracy, bringing Indonesian
                 products to global shelves.

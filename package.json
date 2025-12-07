@@ -13,7 +13,8 @@
     "firebase": "^12.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^7.10.1"
+    "react-router-dom": "^7.10.1",
+    "undici": "^7.16.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
