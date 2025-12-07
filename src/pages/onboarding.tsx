@@ -9,7 +9,7 @@ export default function Onboarding() {
 
   const [productName, setProductName] = useState("");
   const [productCategory, setProductCategory] = useState("");
-  const [productDescription] = useState("");
+  const [productDescription, setProductDescription] = useState("");
   const [tradeRoute, setTradeRoute] = useState("");
   const [exportVolume, setExportVolume] = useState("");
 
@@ -40,51 +40,28 @@ export default function Onboarding() {
                    6. Generate an export readiness score and checklist.
    
                    ### OUTPUT FORMAT
-                   Return your result ONLY in the following JSON structure:
-   
-                   {
-                   "recommended_hs_codes": [
-                       {
-                       "hs_code": "string",
-                       "description": "string",
-                       "confidence": number
-                       },
-                       {
-                       "hs_code": "string",
-                       "description": "string",
-                       "confidence": number
-                       }
-                   ],
-                   "product_summary": {
-                       "product_name": "string",
-                       "category": "string",
-                       "materials": "string or null",
-                       "destination_country": "string"
-                   },
-                   "export_regulations": [
-                       {
-                       "name": "string",
-                       "requirement": "Required | Optional",
-                       "notes": "string"
-                       }
-                   ],
-                   "export_readiness": {
-                       "score_percentage": number,
-                       "status": "Ready | Needs Attention | Not Ready",
-                       "checklist": [
-                       {
-                           "title": "string",
-                           "completed": boolean
-                       }
-                       ]
-                   }
-                   }
-   
-                   ### RULES
+                   Return your result ONLY in the following JSON schema:
+
+                  ### JSON SCHEMA (DO NOT RETURN THIS LITERALLY)
+                  recommended_hs_codes: Array<{ hs_code: string, description: string, confidence: number }>
+                  product_summary: {
+                    product_name: string,
+                    category: string,
+                    materials: string | null,
+                    destination_country: string
+                  }
+                  export_regulations: Array<{ name: string, requirement: "Required" | "Optional", notes: string }>
+                  export_readiness: {
+                    score_percentage: number,
+                    status: "Ready" | "Needs Attention" | "Not Ready",
+                    checklist: Array<{ title: string, completed: boolean }>
+                  }
+                                    ### RULES
                    - Confidence values must be between 0 and 100.
                    - All text must be concise and professional.
                    - If user information is incomplete, infer the most reasonable assumptions.
-                   - DO NOT include any text outside the JSON.
+                   - DO NOT include any text outside this JSON.
+                   - Return ONLY valid JSON matching this schema.
                    `;
 
     try {
@@ -113,18 +90,18 @@ export default function Onboarding() {
 
       const json = JSON.parse(raw);
       console.log("PARSED JSON:", json);
+      
 
       const resultText = json.choices?.[0]?.message?.content;
       console.log("MODEL OUTPUT:", resultText);
       
       if (!resultText) throw new Error("Invalid API response");
-
-      let resultObject;
-      try {
-        resultObject = JSON.parse(resultText);
-      } catch {
-        throw new Error("Model returned invalid JSON");
-      }
+      const cleaned = resultText
+            .trim()
+            .replace(/^```json/, "")   
+            .replace(/^```/, "")       
+            .replace(/```$/, "");      
+      const resultObject = JSON.parse(cleaned);
 
       navigate("/recommendation", { state: resultObject });
     } catch (err: unknown) {
@@ -201,6 +178,8 @@ export default function Onboarding() {
               className="w-full font-[Arial] h-56 p-4 text-lg sm:text-2xl lg:text-4xl shadow-[1px_1px_6.8px_2px_rgba(0,0,0,0.25)]
                 resize-none align-top text-[rgba(0,0,0,0.65)]"
               placeholder="Describe your product, key features, and specifications..."
+              value={productDescription}
+              onChange={(e) => setProductDescription(e.target.value)}
             ></textarea>
           </div>
         </section>
