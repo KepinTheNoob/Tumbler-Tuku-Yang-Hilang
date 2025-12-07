@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-    BarChart, Bar, Legend,
+    BarChart, Bar,
 } from 'recharts';
 import Footer from "../components/footer";
 import Navbar from '../components/navbar';
