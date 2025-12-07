@@ -31,7 +31,7 @@ export default function Onboarding() {
     setLoading(true);
 
     const prompt = `You are an expert trade compliance and HS code classification assistant.
-                   Based on the user’s product and trade information, you must analyze the data 
+                   Based on the user's product and trade information, you must analyze the data 
                    and generate accurate HS code recommendations and export readiness details.
    
                    ### USER INPUT DATA
@@ -44,7 +44,7 @@ export default function Onboarding() {
                    ### YOUR TASK
                    1. Recommend the TOP 2 most suitable HS codes.
                    2. Provide a short explanation for each HS code.
-                   3. Assign a confidence percentage (0–100%) for each HS code.
+                   3. Assign a confidence percentage (0-100%) for each HS code.
                    4. Generate a clear product summary based on the data.
                    5. Identify all export regulations the exporter must comply with.
                    6. Generate an export readiness score and checklist.
@@ -104,7 +104,7 @@ export default function Onboarding() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer $import{import.meta.env.VITE_API_KEY}`,
+            Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
           },
           body: JSON.stringify({
             model: "meta-llama/llama-4-maverick-17b-128e-instruct",
@@ -137,9 +137,14 @@ export default function Onboarding() {
       }
 
       navigate("/recommendation", { state: resultObject });
-    } catch (err: any) {
-      console.error("FULL ERROR:", err);
-      setErrorMsg(err.message || "Something went wrong");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error(err.message);
+        setErrorMsg(err.message);
+      } else {
+        console.error("Unknown error:", err);
+        setErrorMsg("Unknown error occurred");
+      }
     } finally {
       setLoading(false);
     }
@@ -166,7 +171,7 @@ export default function Onboarding() {
         }}
       >
         {errorMsg && (
-          <p className="mb-4 text-red-600 font-semibold">{errorMsg}</p>
+          <p className="mb-4 font-semibold text-red-600">{errorMsg}</p>
         )}
         <h1 className="font-[Arial] text-2xl  font-bold text-black lg:text-6xl sm:text-4xl">
           Product Information
@@ -195,7 +200,7 @@ export default function Onboarding() {
             <Dropdown
               options={CategoryData}
               placeholder="Select a Category"
-              onChange={(value: any) => setProductCategory(value)}
+              onChange={(value: string) => setProductCategory(value)}
             />
           </div>
           <div className="flex flex-col justify-start gap-2 align-middle">

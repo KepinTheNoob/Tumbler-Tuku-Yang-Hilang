@@ -1,6 +1,6 @@
-import Footer from "./components/footer";
-import Navbar from "./components/navbar";
-import { useAuth } from "./auth/AuthContext";
+import Footer from "../components/footer";
+import Navbar from "../components/navbar";
+import { useAuth } from "../auth/AuthContext";
 
 export default function Home() {
   const { user } = useAuth();
@@ -52,7 +52,7 @@ export default function Home() {
             </a>
           )}
 
-          <div className="mt-10 animate-fade-in delay-500">
+          <div className="mt-10 delay-500 animate-fade-in">
             <img
               src="Img_Home/building.png"
               alt="Building"
@@ -77,7 +77,7 @@ before:bg-[linear-gradient(-9deg,transparent_40%,#7993FE_40%,#7993FE_65%,transpa
           Key Points
         </h2>
 
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center relative">
+        <div className="relative grid max-w-5xl grid-cols-1 gap-8 mx-auto text-center md:grid-cols-3">
           {[
             {
               title: "High Recommendation Accuracy",
@@ -95,7 +95,7 @@ before:bg-[linear-gradient(-9deg,transparent_40%,#7993FE_40%,#7993FE_65%,transpa
             >
               <img
                 src={item.img}
-                className="w-9 h-auto mx-auto mb-4 object-contain"
+                className="object-contain h-auto mx-auto mb-4 w-9"
                 alt={item.title}
               />
               <h3 className="font-semibold text-gray-800">{item.title}</h3>
@@ -116,7 +116,7 @@ before:bg-[linear-gradient(-9deg,transparent_40%,#7993FE_40%,#7993FE_65%,transpa
         </div>
 
         {/* Text */}
-        <div className="md:col-span-2 mx-auto max-w-xl text-left">
+        <div className="max-w-xl mx-auto text-left md:col-span-2">
           <h2 className="text-4xl font-bold text-[#253D6D] mb-6">
             Challenges for UMKM When Starting to Export
           </h2>
@@ -139,7 +139,7 @@ before:bg-[linear-gradient(-9deg,transparent_40%,#7993FE_40%,#7993FE_65%,transpa
           Key Points
         </h2>
 
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center relative">
+        <div className="relative grid max-w-5xl grid-cols-1 gap-8 mx-auto text-center md:grid-cols-3">
           {[
             {
               title: "High Recommendation Accuracy",
@@ -157,7 +157,7 @@ before:bg-[linear-gradient(-9deg,transparent_40%,#7993FE_40%,#7993FE_65%,transpa
             >
               <img
                 src={item.img}
-                className="w-9 h-auto mx-auto mb-4 object-contain"
+                className="object-contain h-auto mx-auto mb-4 w-9"
                 alt={item.title}
               />
               <h3 className="font-semibold text-gray-800">{item.title}</h3>
@@ -167,7 +167,7 @@ before:bg-[linear-gradient(-9deg,transparent_40%,#7993FE_40%,#7993FE_65%,transpa
       </section>
 
       {/* How It Works */}
-      <section className="py-16 px-4">
+      <section className="px-4 py-16">
         <h2 className="text-5xl font-bold text-center text-[#2F77B0] mb-10">
           How It Works
         </h2>
@@ -204,7 +204,7 @@ before:bg-[linear-gradient(-9deg,transparent_40%,#7993FE_40%,#7993FE_65%,transpa
 
       {/* CTA Section */}
       <section className="py-16 bg-[#2F77B0] text-white text-center px-4 bg-[url('/Img_Home/background.png')] bg-no-repeat bg-cover bg-center">
-        <div className="text-left max-w-xl">
+        <div className="max-w-xl text-left">
           <p className="text-lg">Let's Move Forward Together</p>
           <h2 className="text-4xl font-semibold leading-tight">
             Ready to Export Your Products to the Global Market?
@@ -213,7 +213,7 @@ before:bg-[linear-gradient(-9deg,transparent_40%,#7993FE_40%,#7993FE_65%,transpa
             Get HS Code recommendations and check export regulations instantly.
           </p>
         </div>
-        <div className="flex md:justify-end w-full md:w-auto">
+        <div className="flex w-full md:justify-end md:w-auto">
           <a href="/onboarding">
             <button className="mt-6 px-8 py-3 bg-[#253D6D] text-white font-semibold rounded-xl hover:opacity-90 transition">
               Get Started
