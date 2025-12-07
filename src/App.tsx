@@ -5,7 +5,7 @@ import SignUp from "./pages/SignUp";
 import Profile from "./pages/Profile";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import Homepage from "./pages/Homepage";
-import EditProfile from "./EditProfile";
+import EditProfile from "./pages/EditProfile";
 import Onboarding from "./pages/onboarding";
 
 function AppRoutes() {

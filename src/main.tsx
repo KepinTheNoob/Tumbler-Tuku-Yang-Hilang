@@ -5,8 +5,9 @@ import SignUp from './pages/SignUp'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Login from './pages/Login'
 import Home from './home'
-import HSCodeRecommendation from './recommendation'
+import HSCodeRecommendation from './pages/recommendation'
 import Onboarding from './pages/onboarding'
+import Dashboard from './pages/Dashboard'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -18,6 +19,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path='/home' element={<Home />}/>
           <Route path='/recommendation' element={<HSCodeRecommendation />}/>
           <Route path='/onboarding' element={<Onboarding />}/>
+          <Route path='/dashboard' element={<Dashboard />}/>
         </Route>
       </Routes>
     </BrowserRouter>
