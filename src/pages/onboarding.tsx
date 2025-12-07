@@ -39,7 +39,6 @@ export default function Onboarding() {
                    Product Category: ${productCategory}
                    Product Description: ${productDescription}
                    Primary Trade Route: ${tradeRoute}
-                   HS Code (if provided): ${hsCode}
                    Annual Export Volume: ${exportVolume}
    
                    ### YOUR TASK

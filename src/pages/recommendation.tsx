@@ -1,11 +1,6 @@
-<<<<<<< HEAD:src/pages/recommendation.tsx
+import { useLocation } from "react-router-dom";
 import Footer from "../components/footer";
 import Navbar from "../components/navbar";
-=======
-import { useLocation } from "react-router-dom";
-import Footer from "./components/footer";
-import Navbar from "./components/navbar";
->>>>>>> be39cb9537469cdb2b7a48551df10e7e52443a67:src/recommendation.tsx
 
 export default function HSCodeRecommendation() {
   const { state } = useLocation();
