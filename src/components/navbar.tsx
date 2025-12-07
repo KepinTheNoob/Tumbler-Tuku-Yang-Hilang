@@ -85,18 +85,7 @@ export default function Navbar() {
             Form
           </Link>
         </li>
-        <li>
-          <Link
-            to="/dashboard"
-            className={`px-2 py-1 ${
-              isActive("/dashboard")
-                ? "underline decoration-2 underline-offset-4 text-blue-600"
-                : ""
-            }`}
-          >
-            Dashboard
-          </Link>
-        </li>
+
       </ul>
 
       {user ? (
