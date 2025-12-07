@@ -24,9 +24,7 @@ export default function Profile() {
       setShowSuccess(true);
       const t = setTimeout(() => {
         setShowSuccess(false);
-        try {
           navigate(locationRouter.pathname, { replace: true, state: {} });
-        } catch (e) {}
       }, 5000);
 
       return () => clearTimeout(t);
@@ -72,7 +70,7 @@ export default function Profile() {
   if (authLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#4F70FD]">
-        <div className="text-white text-2xl">Loading...</div>
+        <div className="text-2xl text-white">Loading...</div>
       </div>
     );
   }
@@ -85,7 +83,7 @@ export default function Profile() {
   return (
     <>
       <Navbar />
-      <div className="mt-10 flex justify-center items-center">
+      <div className="flex items-center justify-center mt-10">
         <div className="w-32 h-32 bg-[#FF009D] rounded-full relative flex items-center justify-center border-4 border-black">
           <svg width="90" height="90" fill="white" viewBox="0 0 24 24">
             <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z" />
@@ -95,9 +93,9 @@ export default function Profile() {
 
       <h1 className="flex justify-center mt-2 text-2xl">{userData.name}</h1>
 
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center pb-20">
-        <div className="w-full max-w-sm mt-8 p-6 bg-white rounded-xl shadow-xl border border-gray-200">
-          <div className="flex justify-between items-center mb-6 border-b pb-4">
+      <div className="flex flex-col items-center min-h-screen pb-20 bg-gray-50">
+        <div className="w-full max-w-sm p-6 mt-8 bg-white border border-gray-200 shadow-xl rounded-xl">
+          <div className="flex items-center justify-between pb-4 mb-6 border-b">
             <h2 className="text-xl font-semibold text-gray-800">
               Profile Information
             </h2>
@@ -166,14 +164,14 @@ export default function Profile() {
               console.error("Logout error:", err);
             }
           }}
-          className="mt-2 px-3 py-2 text-md font-medium text-white bg-red-500 rounded-lg hover:bg-red-600"
+          className="px-3 py-2 mt-2 font-medium text-white bg-red-500 rounded-lg text-md hover:bg-red-600"
         >
           Logout
         </button>
       </div>
 
       {showSuccess && (
-        <div className="fixed bottom-5 bg-blue-500 text-white px-5 py-3 rounded-lg shadow-lg animate-fade-in">
+        <div className="fixed px-5 py-3 text-white bg-blue-500 rounded-lg shadow-lg bottom-5 animate-fade-in">
           Profile Successfully Changed
         </div>
       )}

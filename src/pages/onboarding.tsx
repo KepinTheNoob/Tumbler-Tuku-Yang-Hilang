@@ -89,18 +89,13 @@ export default function Onboarding() {
         }
       );
 
-      console.log("STATUS:", response.status);
-
       const raw = await response.text();
-      console.log("RAW RESPONSE:", raw);
 
       if (!response.ok) throw new Error("API request failed");
 
       const json = JSON.parse(raw);
-      console.log("PARSED JSON:", json);
 
       const resultText = json.choices?.[0]?.message?.content;
-      console.log("MODEL OUTPUT:", resultText);
 
       if (!resultText) throw new Error("Invalid API response");
       const cleaned = resultText
@@ -113,10 +108,8 @@ export default function Onboarding() {
       navigate("/recommendation", { state: resultObject });
     } catch (err: unknown) {
       if (err instanceof Error) {
-        console.error(err.message);
         setErrorMsg(err.message);
       } else {
-        console.error("Unknown error:", err);
         setErrorMsg("Unknown error occurred");
       }
     } finally {
@@ -124,6 +117,7 @@ export default function Onboarding() {
     }
   };
 
+  // form 
   return (
     <>
       <Navbar />

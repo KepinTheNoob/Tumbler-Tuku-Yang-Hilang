@@ -16,35 +16,8 @@ import { useAuth } from "../auth/AuthContext";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
 import { useNavigate } from "react-router-dom";
-interface ActivityDataPoint {
-  name: string; // Bulan
-  analyses: number; // Jumlah analisis
-}
-
-const monthlyActivityData: ActivityDataPoint[] = [
-  { name: "Jan", analyses: 9 },
-  { name: "Feb", analyses: 18 },
-  { name: "Mar", analyses: 27 },
-  { name: "Apr", analyses: 18 },
-  { name: "May", analyses: 24 },
-  { name: "Jun", analyses: 27 },
-  { name: "Jul", analyses: 36 },
-];
-
-// Data untuk Top Destination Countries (Bar Chart)
-interface CountryDataPoint {
-  country: string;
-  analyses: number;
-  fill: string; // Warna untuk Bar Chart
-}
-
-const topCountriesData: CountryDataPoint[] = [
-  { country: "US", analyses: 24, fill: "#8884d8" },
-  { country: "JP", analyses: 18, fill: "#83a6ed" },
-  { country: "AU", analyses: 15, fill: "#8dd1e1" },
-  { country: "SG", analyses: 12, fill: "#82ca9d" },
-  { country: "DE", analyses: 9, fill: "#a4de6c" },
-];
+import { monthlyActivityData } from "../data/monthlyActivityData";
+import { topCountriesData } from "../data/topCountriesData";
 
 // --- 2. KOMPONEN CHART BARU ---
 
@@ -74,7 +47,6 @@ const AnalysisActivityChart: React.FC = () => (
 const TopCountriesBarChart: React.FC = () => (
   <div style={{ width: "100%", height: 300 }}>
     <ResponsiveContainer width="100%" height="100%">
-      {/* Menggunakan layout 'vertical' untuk Bar Chart horizontal */}
       <BarChart
         layout="vertical"
         data={topCountriesData}
@@ -86,7 +58,6 @@ const TopCountriesBarChart: React.FC = () => (
         {/* XAxis (Horizontal) adalah sumbu nilai, tanpa dataKey */}
         <XAxis type="number" hide />
         <Tooltip />
-        {/* Bar menggunakan dataKey 'analyses' */}
         <Bar
           dataKey="analyses"
           fill="#3b82f6"
@@ -103,8 +74,8 @@ export default function Dashboard() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
-  const [userName, setUsername] = useState<String>("Guest");
-  const [loadingData, setLoadingData] = useState<boolean>(true);
+  const [userName, setUsername] = useState<string>("Guest");
+  const [, setLoadingData] = useState<boolean>(true);
 
   useEffect(() => {
     if (user && user.uid) {
@@ -146,7 +117,7 @@ export default function Dashboard() {
     <>
       <Navbar />
       <main className="px-8">
-        <header className="space-y-3 py-10">
+        <header className="py-10 space-y-3">
           <h1 className="font-bold text-[Arial] text-3xl text-center sm:text-left">
             Hello, {userName}
           </h1>
@@ -156,10 +127,10 @@ export default function Dashboard() {
         </header>
 
         {/* STATS CARDS */}
-        <section className="grid grid-cols-1 sm:grid-cols-4 xl:grid-cols-4 gap-7 pb-10">
+        <section className="grid grid-cols-1 pb-10 sm:grid-cols-4 xl:grid-cols-4 gap-7">
           {/* Total Analysis */}
-          <div className="flex justify-between align-middle bg-blue-50 flex-row sm:p-9 p-5 border border-gray-500 rounded-lg">
-            <div className="flex justify-start align-middle flex-col gap-3 ">
+          <div className="flex flex-row justify-between p-5 align-middle border border-gray-500 rounded-lg bg-blue-50 sm:p-9">
+            <div className="flex flex-col justify-start gap-3 align-middle ">
               <p className="text-xl text-[Arial] text-gray-500">
                 Total Analysis
               </p>
@@ -169,15 +140,15 @@ export default function Dashboard() {
                 <span className="text-green-600">+12% </span>vs last month
               </p>
             </div>
-            <div className="flex justify-start align-middle flex-col gap-3 ">
+            <div className="flex flex-col justify-start gap-3 align-middle ">
               <div className="p-4 bg-blue-100 rounded-xl">
                 <img src={`dashboard/checklist.png`} alt="" className="w-8" />
               </div>
             </div>
           </div>
           {/* This Month */}
-          <div className="flex justify-between align-middle flex-row sm:p-9 p-5 border border-gray-500 rounded-lg">
-            <div className="flex justify-start align-middle flex-col gap-3 ">
+          <div className="flex flex-row justify-between p-5 align-middle border border-gray-500 rounded-lg sm:p-9">
+            <div className="flex flex-col justify-start gap-3 align-middle ">
               <p className="text-xl text-[Arial] text-gray-500">This Month</p>
               <p className="text-3xl text-[Arial] font-bold ">24</p>
               <p className="text-sm text-[Arial] text-gray-500">Dec 2025</p>
@@ -185,7 +156,7 @@ export default function Dashboard() {
                 <span className="text-green-600">+8% </span>vs last month
               </p>
             </div>
-            <div className="flex justify-start align-middle flex-col gap-3 ">
+            <div className="flex flex-col justify-start gap-3 align-middle ">
               <div className="p-4 bg-gray-200 rounded-xl">
                 <img
                   src={`dashboard/graph-increase.png`}
@@ -196,23 +167,23 @@ export default function Dashboard() {
             </div>
           </div>
           {/* Countries */}
-          <div className="flex justify-between align-middle flex-row sm:p-9 p-5 border border-gray-500 rounded-lg">
-            <div className="flex justify-start align-middle flex-col gap-3 ">
+          <div className="flex flex-row justify-between p-5 align-middle border border-gray-500 rounded-lg sm:p-9">
+            <div className="flex flex-col justify-start gap-3 align-middle ">
               <p className="text-xl text-[Arial] text-gray-500">Countries</p>
               <p className="text-3xl text-[Arial] font-bold ">18</p>
               <p className="text-sm text-[Arial] text-gray-500">
                 Unique Destinations
               </p>
             </div>
-            <div className="flex justify-start align-middle flex-col gap-3 ">
+            <div className="flex flex-col justify-start gap-3 align-middle ">
               <div className="p-4 bg-gray-200 rounded-xl">
                 <img src={`dashboard/globe.png`} alt="" className="w-8" />
               </div>
             </div>
           </div>
           {/* Avg. Confidence */}
-          <div className="flex justify-between align-middle bg-green-50 flex-row sm:p-9 p-5 border border-gray-500 rounded-lg">
-            <div className="flex justify-start align-middle flex-col gap-3 ">
+          <div className="flex flex-row justify-between p-5 align-middle border border-gray-500 rounded-lg bg-green-50 sm:p-9">
+            <div className="flex flex-col justify-start gap-3 align-middle ">
               <p className="text-xl text-[Arial] text-gray-500">
                 Avg. Confidence
               </p>
@@ -221,8 +192,8 @@ export default function Dashboard() {
                 Recommendation Accuracy
               </p>
             </div>
-            <div className="flex justify-start align-middle flex-col gap-3 ">
-              <div className="sm:p-5 p-3 bg-green-200 rounded-xl">
+            <div className="flex flex-col justify-start gap-3 align-middle ">
+              <div className="p-3 bg-green-200 sm:p-5 rounded-xl">
                 <img
                   src={`dashboard/clock-outline.png`}
                   alt=""
@@ -234,39 +205,39 @@ export default function Dashboard() {
         </section>
 
         {/* RIWAYAT ANALISIS & QUICK ACTIONS */}
-        <section className="grid lg:grid-cols-3 grid-cols-1 gap-6">
-          <article className="lg:col-span-2 border border-gray-500 p-8 rounded-lg mb-2">
+        <section className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+          <article className="p-8 mb-2 border border-gray-500 rounded-lg lg:col-span-2">
             <h2 className="font-[Arial] sm:text-3xl text-xl text-left font-medium">
               Recent Analysis History
             </h2>
-            <div className="flex justify-center flex-col gap-5 pt-7">
+            <div className="flex flex-col justify-center gap-5 pt-7">
               {/* ... (Isi Riwayat Analisis yang sudah ada) ... */}
               <div className="flex justify-between p-10 border border-gray-400 rounded-[20px] sm:flex-row flex-col gap-7">
-                <div className="flex justify-start flex-col sm:flex-row gap-5">
+                <div className="flex flex-col justify-start gap-5 sm:flex-row">
                   <div className="p-4 bg-blue-100 rounded-xl">
                     <img src={`dashboard/cube.png`} alt="" />
                   </div>
-                  <div className="flex justify-between flex-col gap-2">
-                    <div className="flex justify-between flex-col sm:flex-row gap-3">
-                      <p className="sm:text-xl text-lg">
+                  <div className="flex flex-col justify-between gap-2">
+                    <div className="flex flex-col justify-between gap-3 sm:flex-row">
+                      <p className="text-lg sm:text-xl">
                         Organic Coffee Beans{" "}
                       </p>
                       <span className="px-1 bg-[#DBFFDB] flex justify-center items-center rounded-md text-[#42B540]">
                         Completed
                       </span>
                     </div>
-                    <div className="flex justify-between align-middle flex-col gap-1 sm:flex-row">
+                    <div className="flex flex-col justify-between gap-1 align-middle sm:flex-row">
                       <p className="text-sm text-gray-600">0901.21.00</p>
                       <p className="text-sm text-gray-600">United States</p>
                       <p className="text-sm text-gray-600">Dec 5, 2025</p>
                     </div>
                   </div>
                 </div>
-                <hr className="sm:hidden block border-gray-300" />
-                <div className="flex justify-between items-center flex-row gap-4">
-                  <div className="flex justify-center align-middle flex-col gap-1">
+                <hr className="block border-gray-300 sm:hidden" />
+                <div className="flex flex-row items-center justify-between gap-4">
+                  <div className="flex flex-col justify-center gap-1 align-middle">
                     <p className="text-sm text-gray-700">Confidence</p>
-                    <p className="text-4xl text-blue-700 font-bold">75%</p>
+                    <p className="text-4xl font-bold text-blue-700">75%</p>
                   </div>
                   <img
                     src={`dashboard/arrow-left.png`}
@@ -276,31 +247,31 @@ export default function Dashboard() {
                 </div>
               </div>
               <div className="flex justify-between p-10 border border-gray-400 rounded-[20px] sm:flex-row flex-col gap-7">
-                <div className="flex justify-start flex-col sm:flex-row gap-5">
+                <div className="flex flex-col justify-start gap-5 sm:flex-row">
                   <div className="p-4 bg-blue-100 rounded-xl">
                     <img src={`dashboard/cube.png`} alt="" />
                   </div>
-                  <div className="flex justify-between flex-col gap-2">
-                    <div className="flex justify-between flex-col sm:flex-row gap-3">
-                      <p className="sm:text-xl text-lg">
+                  <div className="flex flex-col justify-between gap-2">
+                    <div className="flex flex-col justify-between gap-3 sm:flex-row">
+                      <p className="text-lg sm:text-xl">
                         Organic Coffee Beans{" "}
                       </p>
-                      <span className="px-1 bg-yellow-100 flex justify-center items-center rounded-md text-yellow-400">
+                      <span className="flex items-center justify-center px-1 text-yellow-400 bg-yellow-100 rounded-md">
                         Pending
                       </span>
                     </div>
-                    <div className="flex justify-between align-middle flex-col gap-1 sm:flex-row">
+                    <div className="flex flex-col justify-between gap-1 align-middle sm:flex-row">
                       <p className="text-sm text-gray-600">0901.21.00</p>
                       <p className="text-sm text-gray-600">United States</p>
                       <p className="text-sm text-gray-600">Dec 5, 2025</p>
                     </div>
                   </div>
                 </div>
-                <hr className="sm:hidden block border-gray-300" />
-                <div className="flex justify-between items-center flex-row gap-4">
-                  <div className="flex justify-center align-middle flex-col gap-1">
+                <hr className="block border-gray-300 sm:hidden" />
+                <div className="flex flex-row items-center justify-between gap-4">
+                  <div className="flex flex-col justify-center gap-1 align-middle">
                     <p className="text-sm text-gray-700">Confidence</p>
-                    <p className="text-4xl text-blue-700 font-bold">89%</p>{" "}
+                    <p className="text-4xl font-bold text-blue-700">89%</p>{" "}
                     {/* Changed value for Pending */}
                   </div>
                   <img
@@ -311,31 +282,31 @@ export default function Dashboard() {
                 </div>
               </div>
               <div className="flex justify-between p-10 border border-gray-400 rounded-[20px] sm:flex-row flex-col gap-7">
-                <div className="flex justify-start flex-col sm:flex-row gap-5">
+                <div className="flex flex-col justify-start gap-5 sm:flex-row">
                   <div className="p-4 bg-blue-100 rounded-xl">
                     <img src={`dashboard/cube.png`} alt="" />
                   </div>
-                  <div className="flex justify-between flex-col gap-2">
-                    <div className="flex justify-between flex-col sm:flex-row gap-3">
-                      <p className="sm:text-xl text-lg">
+                  <div className="flex flex-col justify-between gap-2">
+                    <div className="flex flex-col justify-between gap-3 sm:flex-row">
+                      <p className="text-lg sm:text-xl">
                         Organic Coffee Beans{" "}
                       </p>
-                      <span className="px-1 bg-gray-200 flex justify-center items-center rounded-md text-gray-500">
+                      <span className="flex items-center justify-center px-1 text-gray-500 bg-gray-200 rounded-md">
                         Draft
                       </span>
                     </div>
-                    <div className="flex justify-between align-middle flex-col gap-1 sm:flex-row">
+                    <div className="flex flex-col justify-between gap-1 align-middle sm:flex-row">
                       <p className="text-sm text-gray-600">0901.21.00</p>
                       <p className="text-sm text-gray-600">United States</p>
                       <p className="text-sm text-gray-600">Dec 5, 2025</p>
                     </div>
                   </div>
                 </div>
-                <hr className="sm:hidden block border-gray-300" />
-                <div className="flex justify-between items-center flex-row gap-4">
-                  <div className="flex justify-center align-middle flex-col gap-1">
+                <hr className="block border-gray-300 sm:hidden" />
+                <div className="flex flex-row items-center justify-between gap-4">
+                  <div className="flex flex-col justify-center gap-1 align-middle">
                     <p className="text-sm text-gray-700">Confidence</p>
-                    <p className="text-4xl text-blue-700 font-bold">91%</p>{" "}
+                    <p className="text-4xl font-bold text-blue-700">91%</p>{" "}
                     {/* Changed value for Draft */}
                   </div>
                   <img
@@ -349,44 +320,44 @@ export default function Dashboard() {
           </article>
 
           {/* QUICK ACTIONS */}
-          <aside className="border border-gray-500 p-6 rounded-lg mb-2 cursor-pointer">
+          <aside className="p-6 mb-2 border border-gray-500 rounded-lg cursor-pointer">
             <h2 className="font-[Arial] text-2xl text-center sm:text-left font-bold">
               Quick Actions
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-6">
+            <div className="grid grid-cols-1 gap-3 pt-6 sm:grid-cols-2">
               <div className="gap-1 p-3 border border-gray-400 rounded-lg bg-[#2990E1] text-white hover:text-gray-500 hover:bg-blue-50">
                 <img src="/dashboard/Plus.png" alt="plus" />
-                <p className="text-sm text-left w-full font-semibold">
+                <p className="w-full text-sm font-semibold text-left">
                   New Analysis
                 </p>
-                <p className="text-xs text-left w-full">
+                <p className="w-full text-xs text-left">
                   Start a new code recommendation
                 </p>
               </div>
-              <div className="gap-1 p-3 border border-gray-400 rounded-lg bg-blue-50 text-gray-500 hover:text-blue-50 hover:bg-blue-500">
+              <div className="gap-1 p-3 text-gray-500 border border-gray-400 rounded-lg bg-blue-50 hover:text-blue-50 hover:bg-blue-500">
                 <img src="/dashboard/Upload.png" alt="" />
-                <p className="text-sm text-left w-full font-semibold">
+                <p className="w-full text-sm font-semibold text-left">
                   Bulk Upload
                 </p>
-                <p className="text-xs text-left w-full">
+                <p className="w-full text-xs text-left">
                   Upload multiple products at once
                 </p>
               </div>
-              <div className="gap-1 p-3 border border-gray-400 rounded-lg bg-blue-50 text-gray-500 hover:text-blue-50 hover:bg-blue-500">
+              <div className="gap-1 p-3 text-gray-500 border border-gray-400 rounded-lg bg-blue-50 hover:text-blue-50 hover:bg-blue-500">
                 <img src="/dashboard/Search.png" alt="" />
-                <p className="text-sm text-left w-full font-semibold">
+                <p className="w-full text-sm font-semibold text-left">
                   Search History
                 </p>
-                <p className="text-xs text-left w-full">
+                <p className="w-full text-xs text-left">
                   Find past recommendations
                 </p>
               </div>
-              <div className="gap-1 p-3 border border-gray-400 rounded-lg bg-blue-50 text-gray-500 hover:text-blue-50 hover:bg-blue-500">
+              <div className="gap-1 p-3 text-gray-500 border border-gray-400 rounded-lg bg-blue-50 hover:text-blue-50 hover:bg-blue-500">
                 <img src="/dashboard/Export.png" alt="" />
-                <p className="text-sm text-left w-full font-semibold">
+                <p className="w-full text-sm font-semibold text-left">
                   Export Report
                 </p>
-                <p className="text-xs text-left w-full">
+                <p className="w-full text-xs text-left">
                   Download your analysis report
                 </p>
               </div>
@@ -395,9 +366,9 @@ export default function Dashboard() {
         </section>
 
         {/* CHART SECTION */}
-        <section className="grid lg:grid-cols-3 grid-cols-1 gap-6 pb-10">
+        <section className="grid grid-cols-1 gap-6 pb-10 lg:grid-cols-3">
           {/* ANALYSIS ACTIVITY (LINE CHART) */}
-          <article className="lg:col-span-2 border border-gray-500 p-8 rounded-lg">
+          <article className="p-8 border border-gray-500 rounded-lg lg:col-span-2">
             <h2 className="font-[Arial] text-2xl text-center sm:text-left font-bold">
               Analysis Activity
             </h2>
@@ -405,7 +376,7 @@ export default function Dashboard() {
           </article>
 
           {/* TOP DESTINATION COUNTRIES (BAR CHART) */}
-          <aside className="border border-gray-500 p-6 rounded-lg">
+          <aside className="p-6 border border-gray-500 rounded-lg">
             <h2 className="font-[Arial] text-2xl text-center sm:text-left font-bold">
               Top Destination Countries
             </h2>

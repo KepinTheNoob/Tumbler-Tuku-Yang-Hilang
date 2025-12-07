@@ -10,7 +10,7 @@ export default function SignUp() {
   const [location, setLocation] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [, setShowPassword] = useState(false);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -87,34 +87,34 @@ export default function SignUp() {
           </div>
 
           {/* Title */}
-          <h1 className="text-3xl font-bold mt-12">Register</h1>
-          <p className="text-gray-600 mt-1 mb-6">Welcome Back to Xporade!</p>
+          <h1 className="mt-12 text-3xl font-bold">Register</h1>
+          <p className="mt-1 mb-6 text-gray-600">Welcome Back to Xporade!</p>
 
           {/* Form */}
           <form
             action=""
-            className="w-full flex flex-col gap-4"
+            className="flex flex-col w-full gap-4"
             onSubmit={handleSubmit}
           >
             <input
               type="text"
               onChange={(e) => setName(e.target.value)}
               placeholder="Name (min. 3 characters)"
-              className="w-full p-4 rounded-xl border-2 border-black focus:outline-none"
+              className="w-full p-4 border-2 border-black rounded-xl focus:outline-none"
             />
 
             <input
               type="email"
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
-              className="w-full p-4 rounded-xl border-2 border-black focus:outline-none"
+              className="w-full p-4 border-2 border-black rounded-xl focus:outline-none"
             />
 
             <input
               type="location"
               onChange={(e) => setLocation(e.target.value)}
               placeholder="Your Location"
-              className="w-full p-4 rounded-xl border-2 border-black focus:outline-none"
+              className="w-full p-4 border-2 border-black rounded-xl focus:outline-none"
             />
 
             <div>
@@ -122,11 +122,11 @@ export default function SignUp() {
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password (min. 6 characters)"
-                className="w-full p-4 rounded-xl border-2 border-black focus:outline-none"
+                className="w-full p-4 border-2 border-black rounded-xl focus:outline-none"
               />
               <button
                 type="button"
-                className="absolute right-4 top-4 text-sm"
+                className="absolute text-sm right-4 top-4"
                 onClick={() => setShowPassword((prev) => !prev)}
               >
               </button>
@@ -136,7 +136,7 @@ export default function SignUp() {
               type="password"
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirm Password"
-              className="w-full p-4 rounded-xl border-2 border-black focus:outline-none"
+              className="w-full p-4 border-2 border-black rounded-xl focus:outline-none"
             />
 
             <button
@@ -149,7 +149,7 @@ export default function SignUp() {
           </form>
 
           {/* Sign Up */}
-          <p className="mt-5 text-black text-sm">
+          <p className="mt-5 text-sm text-black">
             Already have an account?{" "}
             <a href="/login" className="text-blue-600 underline">
               Sign in

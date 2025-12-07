@@ -5,15 +5,11 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 const handleShare = async () => {
-  try {
     await navigator.share({
       title: "HS Code Recommendation",
       text: "Check out my HS Code analysis!",
       url: window.location.href,
     });
-  } catch (err) {
-    console.log("Share failed:", err);
-  }
 };
 
 export default function HSCodeRecommendation() {
@@ -96,7 +92,7 @@ export default function HSCodeRecommendation() {
             alt="Back"
             className="h-6 mr-2"
           />
-          <p className="text-md font-semibold">Back</p>
+          <p className="font-semibold text-md">Back</p>
         </button>
         <h1 className="text-xl font-bold">No data received</h1>
         <p>Please go back and submit the form again.</p>
@@ -107,7 +103,7 @@ export default function HSCodeRecommendation() {
   const data = state;
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-800 font-sans">
+    <div className="min-h-screen font-sans text-gray-800 bg-gray-50">
       {/* Header */}
       <Navbar />
 
@@ -116,15 +112,15 @@ export default function HSCodeRecommendation() {
         <a href="#" className="text-sm text-blue-600">
           ← Back to input form
         </a>
-        <h1 className="text-3xl font-bold mt-4">HS Code Recommendation</h1>
-        <p className="text-gray-600 mt-1">
+        <h1 className="mt-4 text-3xl font-bold">HS Code Recommendation</h1>
+        <p className="mt-1 text-gray-600">
           AI-powered analysis for your export product
         </p>
 
-        <div className="flex space-x-4 mt-4" id="report-content">
+        <div className="flex mt-4 space-x-4" id="report-content">
           <button
             onClick={handleShare}
-            className="px-4 py-2 bg-transparent gap-2 text-white rounded-md flex border-2 border-solid"
+            className="flex gap-2 px-4 py-2 text-white bg-transparent border-2 border-solid rounded-md"
           >
             <span>Share</span>
             <img
@@ -152,21 +148,21 @@ export default function HSCodeRecommendation() {
         <h2 className="text-xl font-semibold">Recommended HS Code</h2>
 
         {data.recommended_hs_codes.map((item: any, index: number) => (
-          <div key={index} className="border bg-white p-4 rounded-lg shadow-sm">
+          <div key={index} className="p-4 bg-white border rounded-lg shadow-sm">
             {index === 0 && (
-              <span className="text-xs bg-blue-600 text-white px-2 py-1 rounded">
+              <span className="px-2 py-1 text-xs text-white bg-blue-600 rounded">
                 Best Match
               </span>
             )}
 
-            <h3 className="text-2xl font-bold text-blue-700 mt-2">
+            <h3 className="mt-2 text-2xl font-bold text-blue-700">
               {item.hs_code}
             </h3>
 
             <p className="text-gray-600">{item.description}</p>
 
-            <div className="flex justify-between items-center mt-2">
-              <span className="text-green-600 font-bold text-lg">
+            <div className="flex items-center justify-between mt-2">
+              <span className="text-lg font-bold text-green-600">
                 {item.confidence}% Confidence
               </span>
             </div>
@@ -175,10 +171,10 @@ export default function HSCodeRecommendation() {
       </section>
 
       {/* Summary and Regulations */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 px-8 mt-8">
+      <section className="grid grid-cols-1 gap-6 px-8 mt-8 lg:grid-cols-2">
         {/* Product Summary */}
-        <div className="bg-white p-6 rounded-lg shadow-sm">
-          <h3 className="text-xl font-semibold mb-4">Product Summary</h3>
+        <div className="p-6 bg-white rounded-lg shadow-sm">
+          <h3 className="mb-4 text-xl font-semibold">Product Summary</h3>
           <ul className="space-y-2 text-gray-700">
             <li>
               <div className="flex gap-1">
@@ -207,7 +203,7 @@ export default function HSCodeRecommendation() {
 
         {/* Export Readiness */}
         <div className="bg-[#FFF2D7] p-6 rounded-lg shadow-sm">
-          <h3 className="text-xl font-semibold mb-4">Export Readiness Score</h3>
+          <h3 className="mb-4 text-xl font-semibold">Export Readiness Score</h3>
           <div className="text-5xl font-bold text-yellow-500">
             {data.export_readiness.score_percentage}%
           </div>
@@ -216,11 +212,11 @@ export default function HSCodeRecommendation() {
       </section>
 
       {/* Regulations & Checklist */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 px-4 md:px-8 mt-6">
+      <section className="grid grid-cols-1 gap-6 px-4 mt-6 lg:grid-cols-2 md:px-8">
         {/* --- Card 1: Export Regulations --- */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div className="p-6 bg-white border border-gray-200 shadow-sm rounded-xl">
           <div className="flex items-center gap-3 mb-5">
-            <div className="p-2 bg-blue-50 rounded text-blue-600">
+            <div className="p-2 text-blue-600 rounded bg-blue-50">
               {/* Icon: FileText */}
               <svg
                 width="20"
@@ -245,10 +241,10 @@ export default function HSCodeRecommendation() {
           </div>
 
           {data.export_regulations.map((reg: any, idx: any) => (
-            <div key={idx} className="p-4 bg-sky-50 border rounded-lg flex">
+            <div key={idx} className="flex p-4 border rounded-lg bg-sky-50">
               <div>
                 <span className="font-semibold">{reg.name}</span>
-                <span className="ml-2 px-2 py-1 text-xs rounded bg-red-500 text-white">
+                <span className="px-2 py-1 ml-2 text-xs text-white bg-red-500 rounded">
                   {reg.requirement}
                 </span>
                 <p className="text-xs text-gray-600">{reg.notes}</p>
@@ -258,9 +254,9 @@ export default function HSCodeRecommendation() {
         </div>
 
         {/* --- Card 2: Export Checklist --- */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 h-fit">
+        <div className="p-6 bg-white border border-gray-200 shadow-sm rounded-xl h-fit">
           <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-blue-50 rounded text-blue-600">
+            <div className="p-2 text-blue-600 rounded bg-blue-50">
               {/* Icon: Clipboard/Checklist */}
               <svg
                 width="20"
@@ -281,7 +277,7 @@ export default function HSCodeRecommendation() {
               <h3 className="text-lg font-bold text-gray-800">
                 Export Checklist
               </h3>
-              <p className="text-xs text-gray-500 font-medium">
+              <p className="text-xs font-medium text-gray-500">
                 1 of 3 items ready
               </p>
             </div>
@@ -298,7 +294,7 @@ export default function HSCodeRecommendation() {
           <div className="space-y-3">
             {/* Checklist Item 1 (Complete) */}
             {data.export_readiness.checklist.map((item: any, idx: any) => (
-              <div key={idx} className="flex gap-3 p-4 rounded-lg border">
+              <div key={idx} className="flex gap-3 p-4 border rounded-lg">
                 <div>{item.completed ? "✅" : "⭕"}</div>
                 <div>
                   <p className="text-sm font-semibold">{item.title}</p>
