@@ -1,17 +1,102 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import Footer from "../components/footer";
 import Navbar from "../components/navbar";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
+const handleShare = async () => {
+  try {
+    await navigator.share({
+      title: "HS Code Recommendation",
+      text: "Check out my HS Code analysis!",
+      url: window.location.href,
+    });
+  } catch (err) {
+    console.log("Share failed:", err);
+  }
+};
 
 export default function HSCodeRecommendation() {
   const { state } = useLocation();
   const navigate = useNavigate();
 
+  const handleExportPDF = () => {
+  if (!data) return;
+
+  const pdf = new jsPDF();
+  const marginLeft = 15;
+  let y = 15;
+
+  // Header Title
+  pdf.setFont("Helvetica", "bold");
+  pdf.setFontSize(20);
+  pdf.text("HS Code Recommendation Report", marginLeft, y);
+  y += 10;
+
+  // Product Summary
+  pdf.setFontSize(14);
+  pdf.setFont("Helvetica", "bold");
+  pdf.text("Product Summary", marginLeft, y);
+  y += 6;
+
+  pdf.setDrawColor(220, 220, 220); 
+  pdf.setFillColor(248, 248, 248);
+  pdf.roundedRect(marginLeft, y, 180, 30, 3, 3, "F");
+  y += 10;
+
+  pdf.setFont("Helvetica", "normal");
+  pdf.setFontSize(12);
+  pdf.text(`Product Name: ${data.product_summary.product_name}`, marginLeft + 5, y);
+  y += 7;
+  pdf.text(`Materials: ${data.product_summary.materials}`, marginLeft + 5, y);
+  y += 7;
+  pdf.text(`Category: ${data.product_summary.category}`, marginLeft + 5, y);
+  y += 15;
+
+  // Table Recommend HS Code
+  pdf.setFontSize(14);
+  pdf.setFont("Helvetica", "bold");
+  pdf.text("Recommended HS Codes", marginLeft, y);
+  y += 6;
+
+  autoTable(pdf, {
+    startY: y,
+    head: [["HS Code", "Confidence (%)", "Description"]],
+    body: data.recommended_hs_codes.map((item: any) => [
+      item.hs_code,
+      item.confidence,
+      item.description ?? "-",
+    ]),
+    styles: {
+      fontSize: 11,
+      cellPadding: 4,
+    },
+    headStyles: {
+      fillColor: [40, 40, 40],
+      textColor: 255,
+      fontStyle: "bold",
+    },
+    alternateRowStyles: {
+      fillColor: [245, 245, 245],
+    },
+  });
+
+  pdf.save("hs-report.pdf");
+};
+
   if (!state) {
     return (
       <div className="p-5">
-        <button onClick={() => navigate("/onboarding")} className="flex items-center">
-            <img src="/Img_Profile/Back_button.png" alt="Back" className="h-6 mr-2" />
-            <p className="text-md font-semibold">Back</p>
+        <button
+          onClick={() => navigate("/onboarding")}
+          className="flex items-center"
+        >
+          <img
+            src="/Img_Profile/Back_button.png"
+            alt="Back"
+            className="h-6 mr-2"
+          />
+          <p className="text-md font-semibold">Back</p>
         </button>
         <h1 className="text-xl font-bold">No data received</h1>
         <p>Please go back and submit the form again.</p>
@@ -36,8 +121,11 @@ export default function HSCodeRecommendation() {
           AI-powered analysis for your export product
         </p>
 
-        <div className="flex space-x-4 mt-4">
-          <button className="px-4 py-2 bg-transparent gap-2 text-white rounded-md flex border-2 border-solid">
+        <div className="flex space-x-4 mt-4" id="report-content">
+          <button
+            onClick={handleShare}
+            className="px-4 py-2 bg-transparent gap-2 text-white rounded-md flex border-2 border-solid"
+          >
             <span>Share</span>
             <img
               src="Img_Recommendation/share.png"
@@ -45,7 +133,10 @@ export default function HSCodeRecommendation() {
               className="h-[25px] w-auto"
             />
           </button>
-          <button className="px-4 py-2 bg-[#1F74E2] text-white rounded-md flex items-center space-x-2">
+          <button
+            onClick={handleExportPDF}
+            className="px-4 py-2 bg-[#1F74E2] text-white rounded-md flex items-center space-x-2"
+          >
             <span>Export Report</span>
             <img
               src="Img_Recommendation/download.png"
@@ -78,9 +169,6 @@ export default function HSCodeRecommendation() {
               <span className="text-green-600 font-bold text-lg">
                 {item.confidence}% Confidence
               </span>
-              <button className="px-3 py-1 bg-blue-600 text-white rounded-md">
-                Select This Code
-              </button>
             </div>
           </div>
         ))}
@@ -157,10 +245,7 @@ export default function HSCodeRecommendation() {
           </div>
 
           {data.export_regulations.map((reg: any, idx: any) => (
-            <div
-              key={idx}
-              className="p-4 bg-sky-50 border rounded-lg flex gap-3"
-            >
+            <div key={idx} className="p-4 bg-sky-50 border rounded-lg flex">
               <div>
                 <span className="font-semibold">{reg.name}</span>
                 <span className="ml-2 px-2 py-1 text-xs rounded bg-red-500 text-white">

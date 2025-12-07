@@ -24,7 +24,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path='/' element={<Home />}/>
           <Route path='/home' element={<Home />}/>
           <Route path='/recommendation' element={<HSCodeRecommendation />}/>
-          <Route path='/onboarding' element={<Onboarding />}/>
           <Route path='/dashboard' element={<Dashboard />}/>
           <Route path='/onboarding' element={
             <ProtectedRoute>

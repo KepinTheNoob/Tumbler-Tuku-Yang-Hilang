@@ -2,10 +2,12 @@ import { useNavigate } from "react-router-dom";
 import Dropdown from "../component/dropdown";
 import Navbar from "../components/navbar";
 import { CategoryData } from "../data/categoryData";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "../auth/AuthContext";
 
 export default function Onboarding() {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [productName, setProductName] = useState("");
   const [productCategory, setProductCategory] = useState("");
@@ -15,6 +17,12 @@ export default function Onboarding() {
 
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async () => {
     setErrorMsg("");
@@ -90,17 +98,16 @@ export default function Onboarding() {
 
       const json = JSON.parse(raw);
       console.log("PARSED JSON:", json);
-      
 
       const resultText = json.choices?.[0]?.message?.content;
       console.log("MODEL OUTPUT:", resultText);
-      
+
       if (!resultText) throw new Error("Invalid API response");
       const cleaned = resultText
-            .trim()
-            .replace(/^```json/, "")   
-            .replace(/^```/, "")       
-            .replace(/```$/, "");      
+        .trim()
+        .replace(/^```json/, "")
+        .replace(/^```/, "")
+        .replace(/```$/, "");
       const resultObject = JSON.parse(cleaned);
 
       navigate("/recommendation", { state: resultObject });
