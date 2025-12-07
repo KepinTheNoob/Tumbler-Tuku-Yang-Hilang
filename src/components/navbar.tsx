@@ -10,7 +10,7 @@ export default function Navbar() {
   const location = useLocation();
   const pathname = location.pathname;
   const [userName, setUsername] = useState<String>("Guest");
-  const [loadingData, setLoadingData] = useState<boolean>(true);
+  // const [loadingData, setLoadingData] = useState<boolean>(true);
 
   const isActive = (path: string) => {
     if (path === "/home")
@@ -27,7 +27,7 @@ export default function Navbar() {
 
   useEffect(() => {
     if (user && user.uid) {
-      setLoadingData(true);
+      // setLoadingData(true);
       const userRef = doc(db, "users", user.uid);
 
       const unsub = onSnapshot(
@@ -40,12 +40,12 @@ export default function Navbar() {
             // Dokumen user belum ada
             setUsername(user.email || "User");
           }
-          setLoadingData(false);
+          // setLoadingData(false);
         },
         (err) => {
           console.error("Dashboard data fetch error:", err);
           setUsername("User"); // Fallback jika ada error
-          setLoadingData(false);
+          // setLoadingData(false);
         }
       );
 
@@ -53,7 +53,7 @@ export default function Navbar() {
     } else if (!authLoading) {
       // Jika auth loading selesai dan tidak ada user
       setUsername("Guest");
-      setLoadingData(false);
+      // setLoadingData(false);
     }
   }, [user, authLoading]);
 
